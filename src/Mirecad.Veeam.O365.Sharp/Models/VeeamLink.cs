@@ -6,7 +6,7 @@ using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
 namespace Mirecad.Veeam.O365.Sharp.Models
 {
     [DataTransferObject(typeof(VeeamLinkDto))]
-    public class VeeamLink<T> : IVeeamLink<T> where T : class
+    public class VeeamLink<T> where T : class
     {
         private readonly VeeamO365Client _client;
 
