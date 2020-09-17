@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
 
 namespace Mirecad.Veeam.O365.Sharp.Models
@@ -7,10 +9,10 @@ namespace Mirecad.Veeam.O365.Sharp.Models
     public class Organization
     {
         //TODO:Implement organization links
-        //private VeeamLink<VeeamPagedResultDto<Job>> _linksJobs;
-        //private VeeamLink<VeeamPagedResultDto<Group>> _linksGroups;
-        private VeeamLink<VeeamPagedResultDto<User>> _linksUsers;
-        //private VeeamLink<VeeamPagedResultDto<Site>> _linksSites;
+        //private VeeamLink<VeeamPagedResult<Job>> _linksJobs;
+        private VeeamLink<VeeamPagedResult<OrganizationGroup>> _linksGroups;
+        private VeeamLink<VeeamPagedResult<OrganizationUser>> _linksUsers;
+        private VeeamLink<VeeamPagedResult<OrganizationSite>> _linksSites;
 
         public string Type { get; set; }
         public string Region { get; set; }
@@ -24,6 +26,15 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public DateTime? LastBackupTime { get; set; }
         public ExchangeOnlineSettings ExchangeOnlineSettings { get; set; }
         public SharePointOnlineSettings SharePointOnlineSettings { get; set; }
+
+        public async Task<VeeamPagedResult<OrganizationUser>> GetUsersAsync(CancellationToken ct = default)
+            => await _linksUsers.InvokeAsync(ct);
+
+        public async Task<VeeamPagedResult<OrganizationSite>> GetSitesAsync(CancellationToken ct = default)
+            => await _linksSites.InvokeAsync(ct);
+
+        public async Task<VeeamPagedResult<OrganizationGroup>> GetGroupsAsync(CancellationToken ct = default)
+            => await _linksGroups.InvokeAsync(ct);
     }
 
     [DataTransferObject(typeof(ExchangeOnlineSettingsDto))]

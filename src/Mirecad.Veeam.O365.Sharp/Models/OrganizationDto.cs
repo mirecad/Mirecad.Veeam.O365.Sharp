@@ -1,5 +1,6 @@
 ﻿using System;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Models
 {
@@ -17,6 +18,9 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public DateTime? LastBackupTime { get; set; }
         public ExchangeOnlineSettingsDto ExchangeOnlineSettings { get; set; }
         public SharePointOnlineSettingsDto SharePointOnlineSettings  { get; set; }
+
+        [JsonProperty("_links")]
+        public OrganizationLinksDto Links { get; set; }
     }
     public class ExchangeOnlineSettingsDto
     {
