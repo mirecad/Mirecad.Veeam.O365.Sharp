@@ -9,7 +9,7 @@ namespace Mirecad.Veeam.O365.Sharp.Models
     public class Organization
     {
         //TODO:Implement organization links
-        //private VeeamLink<VeeamPagedResult<Job>> _linksJobs;
+        private VeeamLink<VeeamPagedResult<Job>> _linksJobs;
         private VeeamLink<VeeamPagedResult<OrganizationGroup>> _linksGroups;
         private VeeamLink<VeeamPagedResult<OrganizationUser>> _linksUsers;
         private VeeamLink<VeeamPagedResult<OrganizationSite>> _linksSites;
@@ -35,6 +35,9 @@ namespace Mirecad.Veeam.O365.Sharp.Models
 
         public async Task<VeeamPagedResult<OrganizationGroup>> GetGroupsAsync(CancellationToken ct = default)
             => await _linksGroups.InvokeAsync(ct);
+
+        public async Task<VeeamPagedResult<Job>> GetJobsAsync(CancellationToken ct = default)
+            => await _linksJobs.InvokeAsync(ct);
     }
 
     [DataTransferObject(typeof(ExchangeOnlineSettingsDto))]
