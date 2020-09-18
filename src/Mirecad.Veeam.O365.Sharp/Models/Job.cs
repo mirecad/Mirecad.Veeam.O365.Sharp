@@ -9,7 +9,7 @@ namespace Mirecad.Veeam.O365.Sharp.Models
     {
         //TODO: create object for links
         private VeeamLink<Organization> _linksOrganization;
-        //private VeeamLink<BackupRepository> _linksBackupRepository;
+        private VeeamLink<BackupRepository> _linksBackupRepository;
         //private VeeamLink<JobSessions> _linksJobSessions;
         //private VeeamLink<Items> _linksExcludedItems;
         //private VeeamLink<Items> _linksSelectedItems;
@@ -22,5 +22,8 @@ namespace Mirecad.Veeam.O365.Sharp.Models
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
             => await _linksOrganization.InvokeAsync(ct);
+
+        public async Task<BackupRepository> GetBackupRepositoryAsync(CancellationToken ct = default)
+            => await _linksBackupRepository.InvokeAsync(ct);
     }
 }
