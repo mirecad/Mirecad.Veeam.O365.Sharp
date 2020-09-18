@@ -20,10 +20,10 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public string ProxyId { get; set; }
 
         [JsonProperty("_links")]
-        public BackupRepositoryLinks Links { get; set; }
+        public BackupRepositoryLinksDto Links { get; set; }
     }
 
-    public class BackupRepositoryLinks
+    public class BackupRepositoryLinksDto
     {
         public VeeamLinkDto Proxy { get; set; }
     }
