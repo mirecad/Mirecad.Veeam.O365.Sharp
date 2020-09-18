@@ -8,12 +8,11 @@ namespace Mirecad.Veeam.O365.Sharp.Models
     [DataTransferObject(typeof(OrganizationDto))]
     public class Organization
     {
-        //TODO: implement Links
         private VeeamLink<VeeamCollectionResult<Job>> _linksJobs;
         private VeeamLink<VeeamPagedResult<OrganizationGroup>> _linksGroups;
         private VeeamLink<VeeamPagedResult<OrganizationUser>> _linksUsers;
         private VeeamLink<VeeamPagedResult<OrganizationSite>> _linksSites;
-        //private VeeamLink<VeeamCollectionResult<UsedRepositories>> _linksUsedRepositories;
+        private VeeamLink<VeeamCollectionResult<UsedRepository>> _linksUsedRepositories;
 
         public string Type { get; set; }
         public string Region { get; set; }
@@ -39,6 +38,9 @@ namespace Mirecad.Veeam.O365.Sharp.Models
 
         public async Task<VeeamCollectionResult<Job>> GetJobsAsync(CancellationToken ct = default)
             => await _linksJobs.InvokeAsync(ct);
+
+        public async Task<VeeamCollectionResult<UsedRepository>> GetUsedRepositoriesAsync(CancellationToken ct = default)
+            => await _linksUsedRepositories.InvokeAsync(ct);
     }
 
     [DataTransferObject(typeof(ExchangeOnlineSettingsDto))]
