@@ -1,8 +1,6 @@
 ﻿using System;
-using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
-using Newtonsoft.Json;
 
-namespace Mirecad.Veeam.O365.Sharp.Models
+namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     public class OrganizationDto
     {
@@ -18,9 +16,6 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public DateTime? LastBackupTime { get; set; }
         public ExchangeOnlineSettingsDto ExchangeOnlineSettings { get; set; }
         public SharePointOnlineSettingsDto SharePointOnlineSettings  { get; set; }
-
-        [JsonProperty("_links")]
-        public OrganizationLinksDto Links { get; set; }
     }
     public class ExchangeOnlineSettingsDto
     {
@@ -41,14 +36,5 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public bool GrantAdminAccess { get; set; }
         public bool UseMfa { get; set; }
         public string ApplicationId { get; set; }
-    }
-
-    public class OrganizationLinksDto
-    {
-        public VeeamLinkDto Jobs { get; set; }
-        public VeeamLinkDto Groups { get; set; }
-        public VeeamLinkDto Users { get; set; }
-        public VeeamLinkDto Sites { get; set; }
-        public VeeamLinkDto UsedRepositories { get; set; }
     }
 }

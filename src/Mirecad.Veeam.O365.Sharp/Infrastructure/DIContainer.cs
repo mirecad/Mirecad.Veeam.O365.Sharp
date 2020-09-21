@@ -62,6 +62,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure
         {
             var builder = new ContainerBuilder();
             builder.RegisterInstance(client);
+            builder.RegisterInstance<IVeeamO365Client>(client);
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                 .Except<VeeamO365Client>();

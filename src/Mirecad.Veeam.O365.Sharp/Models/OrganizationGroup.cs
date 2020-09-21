@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Domain;
 
 namespace Mirecad.Veeam.O365.Sharp.Models
 {

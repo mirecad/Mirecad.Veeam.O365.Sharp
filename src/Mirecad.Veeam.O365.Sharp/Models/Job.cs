@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Domain;
 
 namespace Mirecad.Veeam.O365.Sharp.Models
 {
@@ -14,10 +16,14 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         private VeeamLink<JobItemCollectionResult> _linksSelectedItems;
 
         public string Id { get; set; }
-        public string DisplayName { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
-        public bool IsBackedUp { get; set; }
+        public string Description { get; set; }
+        public DateTime? LastRun { get; set; }
+        public DateTime? NextRun { get; set; }
+        public bool IsEnabled { get; set; }
+        public string BackupType { get; set; }
+        public string LastStatus { get; set; }
+        public SchedulePolicy SchedulePolicy { get; set; }
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
             => await _linksOrganization.InvokeAsync(ct);
