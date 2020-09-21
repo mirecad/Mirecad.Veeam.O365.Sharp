@@ -43,7 +43,7 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string ApplicationId { get; set; }
     }
 
-    public class OrganizationLinksDto
+    internal class OrganizationLinksDto
     {
         public VeeamLinkDto Jobs { get; set; }
         public VeeamLinkDto Groups { get; set; }

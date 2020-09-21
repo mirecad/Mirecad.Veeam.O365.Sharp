@@ -7,12 +7,12 @@ using Mirecad.Veeam.O365.Sharp.Models;
 
 namespace Mirecad.Veeam.O365.Sharp.Infrastructure
 {
-    public sealed class DIContainer
+    public sealed class DiContainer
     {
         private static IContainer _container;
         private static readonly object Lock = new object();
 
-        private DIContainer()
+        private DiContainer()
         {
             //never used
         }

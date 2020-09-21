@@ -1,5 +1,6 @@
 ﻿using System;
 using Mirecad.Veeam.O365.Sharp.Models;
+using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

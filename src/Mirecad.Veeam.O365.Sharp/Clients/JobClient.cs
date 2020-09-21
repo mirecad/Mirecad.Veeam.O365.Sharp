@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Http;
 using Mirecad.Veeam.O365.Sharp.Models;
+using Mirecad.Veeam.O365.Sharp.Objects.Domain;
 
 namespace Mirecad.Veeam.O365.Sharp.Clients
 {

@@ -30,7 +30,7 @@ namespace Mirecad.Veeam.O365.Sharp
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
-            var serviceContainer = DIContainer.Create(this, dtoResolver);
+            var serviceContainer = DiContainer.Create(this, dtoResolver);
             var mapper = Mapping.Create(dtoResolver, serviceContainer);
 
             Setup(client, baseAddress, dtoResolver, mapper);
