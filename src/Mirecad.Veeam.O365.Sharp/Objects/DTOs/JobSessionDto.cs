@@ -1,5 +1,5 @@
 ﻿using System;
-using Mirecad.Veeam.O365.Sharp.Models;
+using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
@@ -15,17 +15,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 
         [JsonProperty("_links")]
         internal JobSessionLinksDto Links { get; set; }
-    }
-
-    public class JobSessionStatistics    
-    {
-        public int ProcessingRateBytesPs { get; set; }
-        public int ProcessingRateItemsPs { get; set; }
-        public int ReadRateBytesPs { get; set; }
-        public int WriteRateBytesPs { get; set; }
-        public int TransferredDataBytes { get; set; }
-        public int ProcessedObjects { get; set; }
-        public string Bottleneck { get; set; }
     }
 
     internal class JobSessionLinksDto

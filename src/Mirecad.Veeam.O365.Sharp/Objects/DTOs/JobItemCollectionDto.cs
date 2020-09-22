@@ -11,9 +11,5 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public List<PartialOrganizationJobItemDto> PartialOrganizations { get; set; } = new List<PartialOrganizationJobItemDto>();
         public List<UserJobItemDto> Users { get; set; } = new List<UserJobItemDto>();
         public List<GroupJobItemDto> Groups { get; set; } = new List<GroupJobItemDto>();
-
-        internal JobItemCollectionDto()
-        {
-        }
     }
 }

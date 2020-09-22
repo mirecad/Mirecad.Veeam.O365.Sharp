@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
-using Mirecad.Veeam.O365.Sharp.Models;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
@@ -12,8 +11,8 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
         internal VeeamLink<Organization> LinksOrganization { get; set; }
         internal VeeamLink<BackupRepository> LinksBackupRepository { get; set; }
         internal VeeamLink<VeeamCollectionResult<JobSession>> LinksJobSessions { get; set; }
-        internal VeeamLink<JobItemCollectionResult> LinksExcludedItems { get; set; }
-        internal VeeamLink<JobItemCollectionResult> LinksSelectedItems { get; set; }
+        internal VeeamLink<JobItemCollection> LinksExcludedItems { get; set; }
+        internal VeeamLink<JobItemCollection> LinksSelectedItems { get; set; }
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
             => await LinksOrganization.InvokeAsync(ct);
@@ -24,10 +23,10 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
         public async Task<VeeamCollectionResult<JobSession>> GetJobSessionsAsync(CancellationToken ct = default)
             => await LinksJobSessions.InvokeAsync(ct);
 
-        public async Task<JobItemCollectionResult> GetExcludedItemsAsync(CancellationToken ct = default)
+        public async Task<JobItemCollection> GetExcludedItemsAsync(CancellationToken ct = default)
             => await LinksExcludedItems.InvokeAsync(ct);
 
-        public async Task<JobItemCollectionResult> GetSelectedItemsAsync(CancellationToken ct = default)
+        public async Task<JobItemCollection> GetSelectedItemsAsync(CancellationToken ct = default)
             => await LinksSelectedItems.InvokeAsync(ct);
     }
 }

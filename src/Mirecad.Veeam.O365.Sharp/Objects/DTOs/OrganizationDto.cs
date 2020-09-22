@@ -1,5 +1,5 @@
 ﻿using System;
-using Mirecad.Veeam.O365.Sharp.Models;
+using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
@@ -21,26 +21,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 
         [JsonProperty("_links")]
         internal OrganizationLinksDto Links { get; set; }
-    }
-    public class ExchangeOnlineSettings
-    {
-        public bool UseApplicationOnlyAuth { get; set; }
-        public string OfficeOrganizationName { get; set; }
-        public string Account { get; set; }
-        public bool GrantAdminAccess { get; set; }
-        public bool UseMfa { get; set; }
-        public string ApplicationId { get; set; }
-    }
-
-    public class SharePointOnlineSettings
-    {
-        public bool UseApplicationOnlyAuth { get; set; }
-        public string OfficeOrganizationName { get; set; }
-        public bool SharePointSaveAllWebParts { get; set; }
-        public string Account { get; set; }
-        public bool GrantAdminAccess { get; set; }
-        public bool UseMfa { get; set; }
-        public string ApplicationId { get; set; }
     }
 
     internal class OrganizationLinksDto

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Mirecad.Veeam.O365.Sharp.Models
+namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     public class VeeamPagedResultDto<T>
     {
