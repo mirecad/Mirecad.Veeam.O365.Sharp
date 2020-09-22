@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Mirecad.Veeam.O365.Sharp.Models;
+using Newtonsoft.Json;
 
-namespace Mirecad.Veeam.O365.Sharp.Models
+namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
-    public class UserDto
+    public class OrganizationUserDto
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
@@ -11,10 +12,10 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public bool IsBackedUp { get; set; }
 
         [JsonProperty("_links")]
-        public UserLinksDto Links { get; set; }
+        internal UserLinksDto Links { get; set; }
     }
 
-    public class UserLinksDto    
+    internal class UserLinksDto    
     {
         public VeeamLinkDto Organization { get; set; }
         public VeeamLinkDto OneDrives { get; set; }

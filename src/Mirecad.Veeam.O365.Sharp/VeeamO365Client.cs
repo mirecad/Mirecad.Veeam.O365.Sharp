@@ -13,7 +13,7 @@ using Mirecad.Veeam.O365.Sharp.Infrastructure.Http;
 
 namespace Mirecad.Veeam.O365.Sharp
 {
-    public class VeeamO365Client : RestClient, IDisposable
+    public class VeeamO365Client : RestClient, IDisposable, IVeeamO365Client
     {
         private const string ApiVersion = "4";
 
@@ -22,12 +22,16 @@ namespace Mirecad.Veeam.O365.Sharp
         private IMapper _mapper;
         private IDataTransferObjectResolver _dtoResolver;
 
-        public IOrganizationClient Organization { get; private set; }
+        public IJobClient Jobs { get; private set; }
+        public IOrganizationClient Organizations { get; private set; }
+        public IOrganizationUserClient OrganizationUsers { get; private set; }
+        public IOrganizationSiteClient OrganizationSites { get; private set; }
+        public IOrganizationGroupClient OrganizationGroups { get; private set; }
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
-            var serviceContainer = DIContainer.Create(this);
-            var mapper = Mapping.Create(_dtoResolver, serviceContainer);
+            var serviceContainer = DiContainer.Create(this, dtoResolver);
+            var mapper = Mapping.Create(dtoResolver, serviceContainer);
 
             Setup(client, baseAddress, dtoResolver, mapper);
         }
@@ -103,7 +107,11 @@ namespace Mirecad.Veeam.O365.Sharp
             _dtoResolver = dtoResolver;
             _mapper = mapper;
 
-            Organization = new OrganizationClient(this);
+            Jobs = new JobClient(this);
+            Organizations = new OrganizationClient(this);
+            OrganizationUsers = new OrganizationUserClient(this);
+            OrganizationSites = new OrganizationSiteClient(this);
+            OrganizationGroups = new OrganizationGroupClient(this);
         }
 
         private async Task<T> GetFullUrlAsync<T>(string url, CancellationToken ct) where T : class

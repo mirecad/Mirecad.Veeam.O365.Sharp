@@ -12,10 +12,10 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         public IEnumerable<T> Results { get; set; }
 
         [JsonProperty("_links")]
-        public VeeamPagedResultLinksDto Links { get; set; }
+        internal VeeamPagedResultLinksDto Links { get; set; }
     }
 
-    public class VeeamPagedResultLinksDto
+    internal class VeeamPagedResultLinksDto
     {
         public VeeamLinkDto First { get; set; }
 
