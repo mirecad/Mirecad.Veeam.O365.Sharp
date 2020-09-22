@@ -22,6 +22,7 @@ namespace Mirecad.Veeam.O365.Sharp
         private IMapper _mapper;
         private IDataTransferObjectResolver _dtoResolver;
 
+        public IBackupRepositoryClient BackupRepositories { get; private set; }
         public IJobClient Jobs { get; private set; }
         public IOrganizationClient Organizations { get; private set; }
         public IOrganizationUserClient OrganizationUsers { get; private set; }
@@ -107,6 +108,7 @@ namespace Mirecad.Veeam.O365.Sharp
             _dtoResolver = dtoResolver;
             _mapper = mapper;
 
+            BackupRepositories = new BackupRepositoryClient(this);
             Jobs = new JobClient(this);
             Organizations = new OrganizationClient(this);
             OrganizationUsers = new OrganizationUserClient(this);
