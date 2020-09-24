@@ -8,11 +8,10 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(SiteJobItemDto))]
     public class SiteJobItem : SiteJobItemBase
     {
+        private VeeamLink<Job> _linksJob;
         public OrganizationSite Site { get; set; }
-
-        internal VeeamLink<Job> LinksJob { get; set; }
-
+        
         public async Task<Job> GetJobAsync(CancellationToken ct = default)
-            => await LinksJob.InvokeAsync(ct);
+            => await _linksJob.InvokeAsync(ct);
     }
 }

@@ -13,7 +13,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public bool? IsBackedUp { get; set; }
         public bool? IsAvailable { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal OrganizationSiteLinks Links { get; set; }
     }

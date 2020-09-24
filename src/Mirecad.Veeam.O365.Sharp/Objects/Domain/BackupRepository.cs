@@ -8,9 +8,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(BackupRepositoryDto))]
     public class BackupRepository : BackupRepositoryDto
     {
-        internal VeeamLink<Proxy> LinksProxy { get; set; }
+        private VeeamLink<Proxy> _linksProxy { get; set; }
         
         public async Task<Proxy> GetProxyAsync(CancellationToken ct = default)
-            => await LinksProxy.InvokeAsync(ct);
+            => await _linksProxy.InvokeAsync(ct);
     }
 }

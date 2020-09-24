@@ -11,7 +11,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public DateTime CreationTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal JobSessionLogLinksDto Links { get; set; }
     }

@@ -8,9 +8,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(JobSessionLogDto))]
     public class JobSessionLog : JobSessionLogDto
     {
-        internal VeeamLink<JobSession> LinksJobSessions { get; set; }
+        private VeeamLink<JobSession> _linksJobSessions;
 
         public async Task<JobSession> GetJobSessionAsync(CancellationToken ct = default)
-            => await LinksJobSessions.InvokeAsync(ct);
+            => await _linksJobSessions.InvokeAsync(ct);
     }
 }

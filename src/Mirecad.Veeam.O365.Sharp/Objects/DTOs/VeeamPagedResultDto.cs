@@ -11,7 +11,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 
         public IEnumerable<T> Results { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal VeeamPagedResultLinksDto Links { get; set; }
     }

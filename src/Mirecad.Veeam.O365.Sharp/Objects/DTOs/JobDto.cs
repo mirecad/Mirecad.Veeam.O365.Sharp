@@ -18,7 +18,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public SchedulePolicy SchedulePolicy { get; set; }
         public BackupType BackupType { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal JobLinksDto Links { get; set; }
     }

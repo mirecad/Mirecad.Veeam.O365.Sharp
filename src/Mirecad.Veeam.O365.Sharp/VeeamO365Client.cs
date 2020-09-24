@@ -103,10 +103,16 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <param name="bodyParameters">Body content parameters.</param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        internal async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        internal async Task<T> PostDomainObjectAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
         {
             var parametersAsDtos = ConvertToDtoBodyParameters(bodyParameters);
-            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, bodyParameters: parametersAsDtos, cancellationToken: ct);
+            Type dtoType = _dtoResolver.GetDataTransferObjectRecursive(typeof(T));
+            var method = this.GetType().GetMethod("PostAsync", BindingFlags.NonPublic | BindingFlags.Instance)
+                .MakeGenericMethod(dtoType);
+            var resultDto = Convert.ChangeType(
+                await method.InvokeAsync(this, new object[] { endpoint, parametersAsDtos, ct }),
+                dtoType);
+            return _mapper.Map<T>(resultDto);
         }
 
         /// <summary>
@@ -139,6 +145,11 @@ namespace Mirecad.Veeam.O365.Sharp
         private async Task<T> GetAsync<T>(string endpoint, QueryParameters queryParameters, CancellationToken ct) where T : class 
         {
             return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Get, ct, queryParameters);
+        }
+
+        private async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        {
+            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, bodyParameters: bodyParameters, cancellationToken: ct);
         }
 
         private Uri ConstructEndpointPath(string endpoint)

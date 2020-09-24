@@ -8,9 +8,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(OrganizationGroupDto))]
     public class OrganizationGroup : OrganizationGroupDto
     {
-        internal VeeamLink<VeeamPagedResult<Organization>> LinksOrganization { get; set; }
+        private VeeamLink<VeeamPagedResult<Organization>> _linksOrganization;
 
         public async Task<VeeamPagedResult<Organization>> GetOrganizationAsync(CancellationToken ct = default)
-            => await LinksOrganization.InvokeAsync(ct);
+            => await _linksOrganization.InvokeAsync(ct);
     }
 }

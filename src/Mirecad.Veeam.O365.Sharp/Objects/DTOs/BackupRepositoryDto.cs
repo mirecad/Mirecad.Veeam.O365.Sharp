@@ -19,7 +19,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string DailyType { get; set; }
         public string ProxyId { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal BackupRepositoryLinksDto Links { get; set; }
     }

@@ -8,13 +8,13 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(OrganizationSiteDto))]
     public class OrganizationSite : OrganizationSiteDto
     {
-        internal VeeamLink<VeeamPagedResult<OrganizationSite>> LinksChildren { get; set; }
-        internal VeeamLink<Organization> LinksOrganization { get; set; }
+        private VeeamLink<VeeamPagedResult<OrganizationSite>> _linksChildren;
+        private VeeamLink<Organization> _linksOrganization;
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
-            => await LinksOrganization.InvokeAsync(ct);
+            => await _linksOrganization.InvokeAsync(ct);
 
         public async Task<VeeamPagedResult<OrganizationSite>> GetChildrenAsync(CancellationToken ct = default)
-            => await LinksChildren.InvokeAsync(ct);
+            => await _linksChildren.InvokeAsync(ct);
     }
 }

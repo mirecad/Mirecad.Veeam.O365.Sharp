@@ -19,7 +19,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public ExchangeOnlineSettings ExchangeOnlineSettings { get; set; }
         public SharePointOnlineSettings SharePointOnlineSettings  { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal OrganizationLinksDto Links { get; set; }
     }

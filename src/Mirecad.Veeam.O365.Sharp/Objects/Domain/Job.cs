@@ -8,25 +8,25 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(JobDto))]
     public class Job : JobDto
     {
-        internal VeeamLink<Organization> LinksOrganization { get; set; }
-        internal VeeamLink<BackupRepository> LinksBackupRepository { get; set; }
-        internal VeeamLink<VeeamCollectionResult<JobSession>> LinksJobSessions { get; set; }
-        internal VeeamLink<JobItemCollection> LinksExcludedItems { get; set; }
-        internal VeeamLink<JobItemCollection> LinksSelectedItems { get; set; }
+        private VeeamLink<Organization> _linksOrganization;
+        private VeeamLink<BackupRepository> _linksBackupRepository;
+        private VeeamLink<VeeamCollectionResult<JobSession>> _linksJobSessions;
+        private VeeamLink<JobItemCollection> _linksExcludedItems;
+        private VeeamLink<JobItemCollection> _linksSelectedItems;
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
-            => await LinksOrganization.InvokeAsync(ct);
+            => await _linksOrganization.InvokeAsync(ct);
 
         public async Task<BackupRepository> GetBackupRepositoryAsync(CancellationToken ct = default)
-            => await LinksBackupRepository.InvokeAsync(ct);
+            => await _linksBackupRepository.InvokeAsync(ct);
 
         public async Task<VeeamCollectionResult<JobSession>> GetJobSessionsAsync(CancellationToken ct = default)
-            => await LinksJobSessions.InvokeAsync(ct);
+            => await _linksJobSessions.InvokeAsync(ct);
 
         public async Task<JobItemCollection> GetExcludedItemsAsync(CancellationToken ct = default)
-            => await LinksExcludedItems.InvokeAsync(ct);
+            => await _linksExcludedItems.InvokeAsync(ct);
 
         public async Task<JobItemCollection> GetSelectedItemsAsync(CancellationToken ct = default)
-            => await LinksSelectedItems.InvokeAsync(ct);
+            => await _linksSelectedItems.InvokeAsync(ct);
     }
 }

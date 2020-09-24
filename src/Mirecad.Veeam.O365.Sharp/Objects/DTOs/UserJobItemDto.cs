@@ -17,7 +17,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
     {
         public OrganizationUserDto User { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal UserJobItemLinksDto Links { get; set; }
     }

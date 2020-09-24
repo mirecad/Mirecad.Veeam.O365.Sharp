@@ -13,7 +13,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string Status { get; set; }
         public JobSessionStatistics Statistics { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal JobSessionLinksDto Links { get; set; }
     }

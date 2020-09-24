@@ -10,7 +10,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public bool? IsAvailable { get; set; }
         public string Details { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal UsedRepositoryLinksDto Links { get; set; }
     }

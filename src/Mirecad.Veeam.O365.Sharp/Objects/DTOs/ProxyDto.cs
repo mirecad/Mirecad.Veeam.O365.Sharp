@@ -15,7 +15,6 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public bool? EnableNetworkThrottling { get; set; }
         public string Status { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("_links")]
         internal ProxyLinksDto Links { get; set; }
     }

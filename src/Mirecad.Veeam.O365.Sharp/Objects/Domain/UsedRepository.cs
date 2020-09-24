@@ -8,9 +8,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(UsedRepositoryDto))]
     public class UsedRepository : UsedRepositoryDto
     {
-        internal VeeamLink<BackupRepository> LinksBackupRepository { get; set; }
+        private VeeamLink<BackupRepository> _linksBackupRepository;
 
         public async Task<BackupRepository> GetBackupRepositoryAsync(CancellationToken ct = default)
-            => await LinksBackupRepository.InvokeAsync(ct);
+            => await _linksBackupRepository.InvokeAsync(ct);
     }
 }

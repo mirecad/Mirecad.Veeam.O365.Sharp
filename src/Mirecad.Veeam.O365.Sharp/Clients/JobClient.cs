@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Http;
 using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Mirecad.Veeam.O365.Sharp.Objects.Domain;
-using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 using Mirecad.Veeam.O365.Sharp.Objects.Enums;
 
 namespace Mirecad.Veeam.O365.Sharp.Clients
@@ -47,7 +46,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
                 .AddOptionalParameter("RunNow", runNow);
 
             var url = $"organizations/{organizationId}/jobs";
-            return await _baseClient.PostAsync<Job>(url, bodyParameters, ct);
+            return await _baseClient.PostDomainObjectAsync<Job>(url, bodyParameters, ct);
         }
 
         public async Task<Job> GetJob(string jobId, CancellationToken ct = default)
