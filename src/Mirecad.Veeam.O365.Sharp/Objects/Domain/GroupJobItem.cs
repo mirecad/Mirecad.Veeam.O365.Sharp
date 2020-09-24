@@ -1,17 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
-using Mirecad.Veeam.O365.Sharp.Models;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(GroupJobItemDto))]
-    public class GroupJobItem : GroupJobItemDto
+    public class GroupJobItem : GroupJobItemBase
     {
-        internal VeeamLink<Job> LinksJob { get; set; }
+        private VeeamLink<Job> _linksJob;
+        public  OrganizationGroup Group { get; set; }
 
         public async Task<Job> GetJobAsync(CancellationToken ct = default)
-            => await LinksJob.InvokeAsync(ct);
+            => await _linksJob.InvokeAsync(ct);
     }
 }

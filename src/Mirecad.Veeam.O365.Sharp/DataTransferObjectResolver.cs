@@ -12,7 +12,7 @@ namespace Mirecad.Veeam.O365.Sharp
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.GetCustomAttributes(typeof(DataTransferObjectAttribute), true).Length > 0)
+                if (HasDataTransferObjectAssociated(type))
                 {
                     yield return type;
                 }
@@ -39,6 +39,11 @@ namespace Mirecad.Veeam.O365.Sharp
                                    $"{nameof(DataTransferObjectAttribute)} not found on type {nameof(Type)}.");
 
             return ((DataTransferObjectAttribute)dtoAttribute).DtoClassType;
+        }
+
+        public bool HasDataTransferObjectAssociated(Type type)
+        {
+            return type.GetCustomAttributes(typeof(DataTransferObjectAttribute), true).Length > 0;
         }
     }
 }

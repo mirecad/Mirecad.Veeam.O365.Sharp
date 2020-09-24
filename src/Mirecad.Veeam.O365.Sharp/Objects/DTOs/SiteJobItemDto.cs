@@ -1,12 +1,15 @@
-﻿using Mirecad.Veeam.O365.Sharp.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
-    public class SiteJobItemDto
+    public class SiteJobItemBase
     {
         public string Id { get; set; }
         public string Type { get; set; }
+    }
+
+    public class SiteJobItemDto : SiteJobItemBase
+    {
         public OrganizationSiteDto Site { get; set; }
 
         [JsonProperty("_links")]

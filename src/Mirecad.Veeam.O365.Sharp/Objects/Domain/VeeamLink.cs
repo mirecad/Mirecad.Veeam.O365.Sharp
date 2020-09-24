@@ -2,8 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
-namespace Mirecad.Veeam.O365.Sharp.Models
+namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(VeeamLinkDto))]
     public class VeeamLink<T> where T : class
@@ -11,7 +12,7 @@ namespace Mirecad.Veeam.O365.Sharp.Models
         private readonly VeeamO365Client _client;
 
         public string Href { get; set; }
-
+        
         public VeeamLink(VeeamO365Client client)
         {
             _client = client;

@@ -1,4 +1,4 @@
-﻿namespace Mirecad.Veeam.O365.Sharp.Models
+﻿namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     public class VeeamLinkDto
     {

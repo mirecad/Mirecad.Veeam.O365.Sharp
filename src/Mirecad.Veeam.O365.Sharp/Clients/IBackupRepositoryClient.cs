@@ -4,8 +4,8 @@ using Mirecad.Veeam.O365.Sharp.Objects.Domain;
 
 namespace Mirecad.Veeam.O365.Sharp.Clients
 {
-    public interface IOrganizationClient
+    public interface IBackupRepositoryClient
     {
-        Task<VeeamCollectionResult<Organization>> GetOrganizations(CancellationToken ct = default);
+        Task<BackupRepository> GetBackupRepository(string repositoryId, CancellationToken ct = default);
     }
 }

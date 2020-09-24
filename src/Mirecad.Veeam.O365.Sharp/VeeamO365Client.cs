@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
@@ -22,6 +23,7 @@ namespace Mirecad.Veeam.O365.Sharp
         private IMapper _mapper;
         private IDataTransferObjectResolver _dtoResolver;
 
+        public IBackupRepositoryClient BackupRepositories { get; private set; }
         public IJobClient Jobs { get; private set; }
         public IOrganizationClient Organizations { get; private set; }
         public IOrganizationUserClient OrganizationUsers { get; private set; }
@@ -94,6 +96,26 @@ namespace Mirecad.Veeam.O365.Sharp
         }
 
         /// <summary>
+        /// Make API POST request and parse response to domain object.
+        /// </summary>
+        /// <typeparam name="T">Expected domain object to be returned.</typeparam>
+        /// <param name="endpoint">Relative API url.</param>
+        /// <param name="bodyParameters">Body content parameters.</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        internal async Task<T> PostDomainObjectAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        {
+            var parametersAsDtos = ConvertToDtoBodyParameters(bodyParameters);
+            Type dtoType = _dtoResolver.GetDataTransferObjectRecursive(typeof(T));
+            var method = this.GetType().GetMethod("PostAsync", BindingFlags.NonPublic | BindingFlags.Instance)
+                .MakeGenericMethod(dtoType);
+            var resultDto = Convert.ChangeType(
+                await method.InvokeAsync(this, new object[] { endpoint, parametersAsDtos, ct }),
+                dtoType);
+            return _mapper.Map<T>(resultDto);
+        }
+
+        /// <summary>
         /// Class initialization.
         /// </summary>
         /// <param name="client"></param>
@@ -107,6 +129,7 @@ namespace Mirecad.Veeam.O365.Sharp
             _dtoResolver = dtoResolver;
             _mapper = mapper;
 
+            BackupRepositories = new BackupRepositoryClient(this);
             Jobs = new JobClient(this);
             Organizations = new OrganizationClient(this);
             OrganizationUsers = new OrganizationUserClient(this);
@@ -124,6 +147,11 @@ namespace Mirecad.Veeam.O365.Sharp
             return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Get, ct, queryParameters);
         }
 
+        private async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        {
+            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, bodyParameters: bodyParameters, cancellationToken: ct);
+        }
+
         private Uri ConstructEndpointPath(string endpoint)
         {
             if (endpoint.StartsWith("/"))
@@ -132,6 +160,37 @@ namespace Mirecad.Veeam.O365.Sharp
             }
 
             return new Uri(_baseAddress, $"/v{ApiVersion}/{endpoint}");
+        }
+
+        /// <summary>
+        /// Converts parameters, that are domain objects into their corresponding DTOs.
+        /// </summary>
+        /// <param name="parameters">Parameters with domain objects.</param>
+        /// <returns></returns>
+        private BodyParameters ConvertToDtoBodyParameters(BodyParameters parameters)
+        {
+            var convertedParameters = new BodyParameters();
+
+            foreach (var bodyParameter in parameters.GetParameters())
+            {
+                var parameter = bodyParameter.Value;
+                if (_dtoResolver.HasDataTransferObjectAssociated(parameter.GetType()))
+                {
+                    var dtoType = _dtoResolver.GetDataTransferObjectRecursive(parameter.GetType());
+                    var methodInfo = _mapper.GetType().GetMethods()
+                        .Single(x => x.Name == "Map"
+                            && x.GetParameters().Length == 1
+                            && x.GetGenericArguments().Length == 1);
+                    var method = methodInfo.MakeGenericMethod(dtoType);
+                    parameter = Convert.ChangeType(
+                        method.Invoke(_mapper, new object[] { parameter }),
+                        dtoType);
+                }
+
+                convertedParameters.AddOptionalParameter(bodyParameter.Key, parameter);
+            }
+
+            return convertedParameters;
         }
 
         protected virtual void Dispose(bool disposing)
