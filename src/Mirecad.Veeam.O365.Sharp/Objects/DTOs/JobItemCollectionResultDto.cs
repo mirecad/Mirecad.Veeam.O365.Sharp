@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Mirecad.Veeam.O365.Sharp.Converters;
+using Mirecad.Veeam.O365.Sharp.Infrastructure.Converters;
 using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     [JsonConverter(typeof(JobItemCollectionConverter))]
-    public class JobItemCollectionDto
+    public class JobItemCollectionResultDto
     {
         public List<SiteJobItemDto> Sites { get; set; } = new List<SiteJobItemDto>();
         public List<PartialOrganizationJobItemDto> PartialOrganizations { get; set; } = new List<PartialOrganizationJobItemDto>();

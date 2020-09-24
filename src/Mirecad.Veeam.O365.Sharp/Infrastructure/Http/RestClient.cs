@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
 {
@@ -23,10 +22,11 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
         protected virtual async Task<T> SendAsync<T>(Uri url, HttpMethod method, CancellationToken cancellationToken,
             QueryParameters queryParameters = null, BodyParameters bodyParameters = null) where T : class
         {
+            //TODO: handle query params
             var urlString = ConstructUrlString(url, queryParameters);
-            using var requestMessage = ConstructRequestMessage(method, urlString, bodyParameters);
-
-            using var response = await _client.SendAsync(requestMessage, cancellationToken);
+            
+            var requestMessage = new HttpRequestMessage(method, urlString);
+            var response = await _client.SendAsync(requestMessage, cancellationToken);
             return await ProcessResponseAsync<T>(response);
         }
 
@@ -54,39 +54,11 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             return urlString;
         }
 
-        private HttpRequestMessage ConstructRequestMessage(HttpMethod method, string url, BodyParameters bodyParameters)
-        {
-            var parameters = bodyParameters?.GetParameters()
-                             ?? new Dictionary<string, object>();
-
-            var jsonString = ConvertToJson(parameters);
-            var request = new HttpRequestMessage(method, url);
-            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-            return request;
-        }
-
         private static async Task<T> ProcessResponseAsync<T>(HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
             var stringContent = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(stringContent);
-        }
-
-        private string ConvertToJson(Dictionary<string, object> parameters)
-        {
-            var jsonSettings = CreateJsonSerializerSettings();
-            var jsonString = JsonConvert.SerializeObject(parameters, jsonSettings);
-            return jsonString;
-        }
-
-        private JsonSerializerSettings CreateJsonSerializerSettings()
-        {
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            jsonSettings.Converters.Add(new StringEnumConverter());
-            return jsonSettings;
         }
     }
 }

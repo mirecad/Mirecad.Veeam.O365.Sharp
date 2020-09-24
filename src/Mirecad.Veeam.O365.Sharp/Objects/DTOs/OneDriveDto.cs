@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mirecad.Veeam.O365.Sharp.Models;
+using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {

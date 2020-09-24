@@ -29,12 +29,5 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <param name="type">Domain class.</param>
         /// <returns></returns>
         Type GetDataTransferObjectRecursive(Type type);
-
-        /// <summary>
-        /// Checks if this class has domain object associated.
-        /// </summary>
-        /// <param name="type">Domain class.</param>
-        /// <returns></returns>
-        bool HasDataTransferObjectAssociated(Type type);
     }
 }
