@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
@@ -95,6 +96,20 @@ namespace Mirecad.Veeam.O365.Sharp
         }
 
         /// <summary>
+        /// Make API POST request and parse response to domain object.
+        /// </summary>
+        /// <typeparam name="T">Expected domain object to be returned.</typeparam>
+        /// <param name="endpoint">Relative API url.</param>
+        /// <param name="bodyParameters">Body content parameters.</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        internal async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        {
+            var parametersAsDtos = ConvertToDtoBodyParameters(bodyParameters);
+            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, bodyParameters: parametersAsDtos, cancellationToken: ct);
+        }
+
+        /// <summary>
         /// Class initialization.
         /// </summary>
         /// <param name="client"></param>
@@ -134,6 +149,37 @@ namespace Mirecad.Veeam.O365.Sharp
             }
 
             return new Uri(_baseAddress, $"/v{ApiVersion}/{endpoint}");
+        }
+
+        /// <summary>
+        /// Converts parameters, that are domain objects into their corresponding DTOs.
+        /// </summary>
+        /// <param name="parameters">Parameters with domain objects.</param>
+        /// <returns></returns>
+        private BodyParameters ConvertToDtoBodyParameters(BodyParameters parameters)
+        {
+            var convertedParameters = new BodyParameters();
+
+            foreach (var bodyParameter in parameters.GetParameters())
+            {
+                var parameter = bodyParameter.Value;
+                if (_dtoResolver.HasDataTransferObjectAssociated(parameter.GetType()))
+                {
+                    var dtoType = _dtoResolver.GetDataTransferObjectRecursive(parameter.GetType());
+                    var methodInfo = _mapper.GetType().GetMethods()
+                        .Single(x => x.Name == "Map"
+                            && x.GetParameters().Length == 1
+                            && x.GetGenericArguments().Length == 1);
+                    var method = methodInfo.MakeGenericMethod(dtoType);
+                    parameter = Convert.ChangeType(
+                        method.Invoke(_mapper, new object[] { parameter }),
+                        dtoType);
+                }
+
+                convertedParameters.AddOptionalParameter(bodyParameter.Key, parameter);
+            }
+
+            return convertedParameters;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -8,8 +8,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string DisplayName { get; set; }
         public string Name { get; set; }
         public string Type  { get; set; }
-        public bool IsBackedUp { get; set; }
+        public bool? IsBackedUp { get; set; }
 
+        [JsonIgnore]
         [JsonProperty("_links")]
         internal UserLinksDto Links { get; set; }
     }

@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Http;
-using Mirecad.Veeam.O365.Sharp.Models;
+using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Mirecad.Veeam.O365.Sharp.Objects.Domain;
+using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
+using Mirecad.Veeam.O365.Sharp.Objects.Enums;
 
 namespace Mirecad.Veeam.O365.Sharp.Clients
 {
@@ -19,6 +21,33 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
         {
             var url = "jobs";
             return await _baseClient.GetDomainObjectAsync<VeeamCollectionResult<Job>>(url, null, ct);
+        }
+
+        public async Task<Job> CreateJobForOrganization(string organizationId,
+            string repositoryId,
+            string name,
+            string description,
+            BackupType backupType,
+            SchedulePolicy schedulePolicy,
+            JobItemCollection selectedItems,
+            string proxyId,
+            bool runNow,
+            CancellationToken ct = default)
+        {
+            ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
+
+            var bodyParameters = new BodyParameters()
+                .AddOptionalParameter("Name", name)
+                .AddOptionalParameter("Description", description)
+                .AddOptionalParameter("BackupType", backupType)
+                .AddOptionalParameter("SchedulePolicy", schedulePolicy)
+                .AddOptionalParameter("SelectedItems", selectedItems)
+                .AddOptionalParameter("ProxyId", proxyId)
+                .AddMandatoryParameter("RepositoryId", repositoryId)
+                .AddOptionalParameter("RunNow", runNow);
+
+            var url = $"organizations/{organizationId}/jobs";
+            return await _baseClient.PostAsync<Job>(url, bodyParameters, ct);
         }
 
         public async Task<Job> GetJob(string jobId, CancellationToken ct = default)

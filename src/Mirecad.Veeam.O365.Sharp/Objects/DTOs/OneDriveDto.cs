@@ -8,6 +8,7 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string Name { get; set; }
         public string Url { get; set; }
 
+        [JsonIgnore]
         [JsonProperty("_links")]
         internal OneDriveLinksDto Links { get; set; }
     }

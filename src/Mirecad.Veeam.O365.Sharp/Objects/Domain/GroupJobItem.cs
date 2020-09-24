@@ -6,8 +6,10 @@ using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(GroupJobItemDto))]
-    public class GroupJobItem : GroupJobItemDto
+    public class GroupJobItem : GroupJobItemBase
     {
+        public  OrganizationGroup Group { get; set; }
+
         internal VeeamLink<Job> LinksJob { get; set; }
 
         public async Task<Job> GetJobAsync(CancellationToken ct = default)
