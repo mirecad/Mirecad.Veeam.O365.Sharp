@@ -1,14 +1,13 @@
-﻿using Mirecad.Veeam.O365.Sharp.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     public class UsedRepositoryDto
     {
-        public long UsedSpaceBytes { get; set; }
-        public int LocalCacheUsedSpaceBytes { get; set; }
-        public int ObjectStorageUsedSpaceBytes { get; set; }
-        public bool IsAvailable { get; set; }
+        public long? UsedSpaceBytes { get; set; }
+        public int? LocalCacheUsedSpaceBytes { get; set; }
+        public int? ObjectStorageUsedSpaceBytes { get; set; }
+        public bool? IsAvailable { get; set; }
         public string Details { get; set; }
 
         [JsonProperty("_links")]

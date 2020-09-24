@@ -1,16 +1,39 @@
 ﻿using System;
-using Mirecad.Veeam.O365.Sharp.Models;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Converters
+namespace Mirecad.Veeam.O365.Sharp.Converters
 {
     public class JobItemCollectionConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            bool notCorrectTypeOfValue = false == value is JobItemCollectionDto;
+            if (notCorrectTypeOfValue)
+            {
+                throw new ArgumentException($"This Json converter can convert only objects of type {nameof(JobItemCollectionDto)}");
+            }
+
+            JobItemCollectionDto jobItemsCol = (JobItemCollectionDto)value;
+            writer.WriteStartArray();
+            foreach (var organization in jobItemsCol.PartialOrganizations)
+            {
+                JToken.FromObject(organization).WriteTo(writer);
+            }
+            foreach (var user in jobItemsCol.Users)
+            {
+                JToken.FromObject(user).WriteTo(writer);
+            }
+            foreach (var site in jobItemsCol.Sites)
+            {
+                JToken.FromObject(site).WriteTo(writer);
+            }
+            foreach (var group in jobItemsCol.Groups)
+            {
+                JToken.FromObject(group).WriteTo(writer);
+            }
+            writer.WriteEnd();
         }
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
@@ -18,9 +41,14 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Converters
             if (reader.TokenType == JsonToken.Null)
                 return null;
 
+            if (objectType != typeof(JobItemCollectionDto))
+            {
+                throw new ArgumentException($"This Json converter can convert only objects of type {nameof(JobItemCollectionDto)}");
+            }
+
             JArray jsonArray = JArray.Load(reader);
 
-            var result = new JobItemCollectionResultDto();
+            var result = new JobItemCollectionDto();
 
             foreach (var jObject in jsonArray.Children())
             {
@@ -58,7 +86,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            throw new NotImplementedException();
+            return objectType == typeof(PartialOrganizationJobItemDto);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Mirecad.Veeam.O365.Sharp.UnitTests
 {
     public class DataTransferObjectResolverTests
     {
-        private IDataTransferObjectResolver _resolver;
+        private readonly IDataTransferObjectResolver _resolver;
 
         private class ClassA
         {
@@ -62,6 +62,22 @@ namespace Mirecad.Veeam.O365.Sharp.UnitTests
             var dtoType = _resolver.GetDataTransferObjectRecursive(typeof(ClassD<ClassB>));
 
             dtoType.Should().Be(typeof(ClassC<ClassA>));
+        }
+
+        [Fact]
+        public void CanRecognizeDomainObject()
+        {
+            var isDomainObject = _resolver.HasDataTransferObjectAssociated(typeof(ClassC<>));
+
+            isDomainObject.Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanRecognizeNonDomainObject()
+        {
+            var isDomainObject = _resolver.HasDataTransferObjectAssociated(typeof(ClassA));
+
+            isDomainObject.Should().BeFalse();
         }
 
     }

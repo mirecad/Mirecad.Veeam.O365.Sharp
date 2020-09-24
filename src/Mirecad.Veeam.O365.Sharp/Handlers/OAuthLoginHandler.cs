@@ -64,6 +64,7 @@ namespace Mirecad.Veeam.O365.Sharp.Handlers
             string responseString = response.Content.ReadAsStringAsync().Result;
             dynamic responseContent = JsonConvert.DeserializeObject(responseString);
             _bearerToken = responseContent.access_token;
+            _tokenExpiresOnUtc = responseContent[".expires"];
         }
     }
 }

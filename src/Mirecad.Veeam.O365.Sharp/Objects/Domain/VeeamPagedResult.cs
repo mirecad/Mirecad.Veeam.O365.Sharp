@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
-namespace Mirecad.Veeam.O365.Sharp.Models
+namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(VeeamPagedResultDto<object>))]
     public class VeeamPagedResult<T> where T : class
     {
-        internal VeeamLink<VeeamPagedResult<T>> LinksFirst { get; set; }
-        internal VeeamLink<VeeamPagedResult<T>> LinksPrevious { get; set; }
-        internal VeeamLink<VeeamPagedResult<T>> LinksNext { get; set; }
+        private VeeamLink<VeeamPagedResult<T>> _linksFirst;
+        private VeeamLink<VeeamPagedResult<T>> _linksPrevious;
+        private VeeamLink<VeeamPagedResult<T>> _linksNext;
 
         public int Offset { get; set; }
         public int Limit { get; set; }
@@ -19,32 +20,32 @@ namespace Mirecad.Veeam.O365.Sharp.Models
 
         public async Task<VeeamPagedResult<T>> GetFirstPageAsync(CancellationToken ct = default)
         {
-            if (LinksFirst == null)
+            if (_linksFirst == null)
             {
                 throw new InvalidOperationException("First page is not available.");
             }
 
-            return await LinksFirst.InvokeAsync(ct);
+            return await _linksFirst.InvokeAsync(ct);
         }
 
         public async Task<VeeamPagedResult<T>> GetPreviousPageAsync(CancellationToken ct = default)
         {
-            if (LinksPrevious == null)
+            if (_linksPrevious == null)
             {
                 throw new InvalidOperationException("Previous page is not available.");
             }
 
-            return await LinksPrevious.InvokeAsync(ct);
+            return await _linksPrevious.InvokeAsync(ct);
         }
 
         public async Task<VeeamPagedResult<T>> GetNextPageAsync(CancellationToken ct = default)
         {
-            if (LinksNext == null)
+            if (_linksNext == null)
             {
                 throw new InvalidOperationException("Next page is not available.");
             }
 
-            return await LinksNext.InvokeAsync(ct);
+            return await _linksNext.InvokeAsync(ct);
         }
     }
 }

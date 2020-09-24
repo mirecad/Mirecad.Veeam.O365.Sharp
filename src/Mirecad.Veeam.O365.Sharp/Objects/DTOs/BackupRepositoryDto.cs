@@ -1,13 +1,12 @@
-﻿using Mirecad.Veeam.O365.Sharp.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
     public class BackupRepositoryDto
     {
-        public bool IsOutOfSync { get; set; }
-        public long CapacityBytes { get; set; }
-        public long FreeSpaceBytes { get; set; }
+        public bool? IsOutOfSync { get; set; }
+        public long? CapacityBytes { get; set; }
+        public long? FreeSpaceBytes { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

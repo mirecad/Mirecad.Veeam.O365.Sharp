@@ -1,5 +1,4 @@
-﻿using Mirecad.Veeam.O365.Sharp.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
 {
@@ -12,8 +11,8 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
         public string Site { get; set; }
         public string Type { get; set; }
         public string LocationType { get; set; }
-        public bool IsBackedUp { get; set; }
-        
+        public bool? IsBackedUp { get; set; }
+
         [JsonProperty("_links")]
         internal OrganizationGroupLinks Links { get; set; }
     }
