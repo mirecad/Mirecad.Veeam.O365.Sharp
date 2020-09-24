@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Models;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
@@ -8,25 +9,25 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(JobDto))]
     public class Job : JobDto
     {
-        private VeeamLink<Organization> _linksOrganization;
-        private VeeamLink<BackupRepository> _linksBackupRepository;
-        private VeeamLink<VeeamCollectionResult<JobSession>> _linksJobSessions;
-        private VeeamLink<JobItemCollection> _linksExcludedItems;
-        private VeeamLink<JobItemCollection> _linksSelectedItems;
+        internal VeeamLink<Organization> LinksOrganization { get; set; }
+        internal VeeamLink<BackupRepository> LinksBackupRepository { get; set; }
+        internal VeeamLink<VeeamCollectionResult<JobSession>> LinksJobSessions { get; set; }
+        internal VeeamLink<JobItemCollectionResult> LinksExcludedItems { get; set; }
+        internal VeeamLink<JobItemCollectionResult> LinksSelectedItems { get; set; }
 
         public async Task<Organization> GetOrganizationAsync(CancellationToken ct = default)
-            => await _linksOrganization.InvokeAsync(ct);
+            => await LinksOrganization.InvokeAsync(ct);
 
         public async Task<BackupRepository> GetBackupRepositoryAsync(CancellationToken ct = default)
-            => await _linksBackupRepository.InvokeAsync(ct);
+            => await LinksBackupRepository.InvokeAsync(ct);
 
         public async Task<VeeamCollectionResult<JobSession>> GetJobSessionsAsync(CancellationToken ct = default)
-            => await _linksJobSessions.InvokeAsync(ct);
+            => await LinksJobSessions.InvokeAsync(ct);
 
-        public async Task<JobItemCollection> GetExcludedItemsAsync(CancellationToken ct = default)
-            => await _linksExcludedItems.InvokeAsync(ct);
+        public async Task<JobItemCollectionResult> GetExcludedItemsAsync(CancellationToken ct = default)
+            => await LinksExcludedItems.InvokeAsync(ct);
 
-        public async Task<JobItemCollection> GetSelectedItemsAsync(CancellationToken ct = default)
-            => await _linksSelectedItems.InvokeAsync(ct);
+        public async Task<JobItemCollectionResult> GetSelectedItemsAsync(CancellationToken ct = default)
+            => await LinksSelectedItems.InvokeAsync(ct);
     }
 }

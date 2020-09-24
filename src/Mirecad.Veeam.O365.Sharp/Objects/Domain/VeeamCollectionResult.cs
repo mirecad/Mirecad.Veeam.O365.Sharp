@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
-using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
-namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
+namespace Mirecad.Veeam.O365.Sharp.Models
 {
     [DataTransferObject(typeof(VeeamCollectionResultDto<>))]
     public class VeeamCollectionResult<T> : List<T>
     {
+        
     }
 }

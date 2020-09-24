@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Models;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
@@ -8,13 +9,13 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     [DataTransferObject(typeof(JobSessionDto))]
     public class JobSession : JobSessionDto
     {
-        private VeeamLink<Job> _linksJob;
-        private VeeamLink<VeeamPagedResult<JobSessionLog>> _linksLog;
+        internal VeeamLink<Job> LinksJob { get; set; }
+        internal VeeamLink<VeeamPagedResult<JobSessionLog>> LinksLog { get; set; }
 
         public async Task<Job> GetJobAsync(CancellationToken ct = default)
-            => await _linksJob.InvokeAsync(ct);
+            => await LinksJob.InvokeAsync(ct);
 
         public async Task<VeeamPagedResult<JobSessionLog>> GetLogsAsync(CancellationToken ct = default)
-            => await _linksLog.InvokeAsync(ct);
+            => await LinksLog.InvokeAsync(ct);
     }
 }

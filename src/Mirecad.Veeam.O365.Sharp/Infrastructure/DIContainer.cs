@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
+using Mirecad.Veeam.O365.Sharp.Models;
 
 namespace Mirecad.Veeam.O365.Sharp.Infrastructure
 {

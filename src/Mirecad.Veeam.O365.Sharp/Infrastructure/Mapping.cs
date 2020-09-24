@@ -48,6 +48,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure
                 };
                 mappings.ConstructServicesUsing(serviceContainer.Resolve);
                 mappings.AddProfile(new DtoMappingProfile(dtoResolver));
+
                 var config = new MapperConfiguration(mappings);
                 var mapper = new Mapper(config);
                 _mapper = mapper;
@@ -73,7 +74,6 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure
                 var dtoType = dtoResolver.GetDataTransferObject(domainObject);
                 CreateMap(dtoType, domainObject)
                     .ConstructUsingServiceLocator();
-                CreateMap(domainObject, dtoType);
             }
         }
     }

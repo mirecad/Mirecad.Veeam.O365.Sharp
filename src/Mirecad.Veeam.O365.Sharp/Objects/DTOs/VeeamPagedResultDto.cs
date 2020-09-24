@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Mirecad.Veeam.O365.Sharp.Objects.DTOs
+namespace Mirecad.Veeam.O365.Sharp.Models
 {
-    public class VeeamPagedResultDto<T> where T : class
+    public class VeeamPagedResultDto<T>
     {
-        public int? Offset { get; set; }
+        public int Offset { get; set; }
 
-        public int? Limit { get; set; }
+        public int Limit { get; set; }
 
         public IEnumerable<T> Results { get; set; }
 
