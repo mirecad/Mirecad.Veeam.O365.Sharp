@@ -22,10 +22,10 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             bool runNow,
             CancellationToken ct = default);
 
-        //Task EnableJob(string jobId, CancellationToken ct = default);
-        //Task DisableJob(string jobId, CancellationToken ct = default);
+        Task EnableJob(string jobId, CancellationToken ct = default);
+        Task DisableJob(string jobId, CancellationToken ct = default);
         Task StartJob(string jobId, CancellationToken ct = default);
-        //Task StopJob(string jobId, CancellationToken ct = default);
+        Task StopJob(string jobId, CancellationToken ct = default);
         //Task StartJobRestoreSession(string jobId, CancellationToken ct = default);
     }
 }

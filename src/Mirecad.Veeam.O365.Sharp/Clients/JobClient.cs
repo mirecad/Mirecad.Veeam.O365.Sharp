@@ -49,15 +49,24 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             return await _baseClient.PostAsync<Job>(url, bodyParameters, ct);
         }
 
+        public async Task EnableJob(string jobId, CancellationToken ct = default)
+        {
+            await PostAction("enable", jobId, ct);
+        }
+
+        public async Task DisableJob(string jobId, CancellationToken ct = default)
+        {
+            await PostAction("disable", jobId, ct);
+        }
+
         public async Task StartJob(string jobId, CancellationToken ct = default)
         {
-            ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
+            await PostAction("start", jobId, ct);
+        }
 
-            var bodyParameters = new BodyParameters()
-                .AddNullParameter("start");
-
-            var url = $"jobs/{jobId}/action";
-            await _baseClient.PostAsync(url, bodyParameters, ct);
+        public async Task StopJob(string jobId, CancellationToken ct = default)
+        {
+            await PostAction("stop", jobId, ct);
         }
 
         public async Task<Job> GetJob(string jobId, CancellationToken ct = default)
@@ -74,6 +83,17 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
 
             var url = $"organizations/{organizationId}/jobs";
             return await _baseClient.GetAsync<VeeamCollectionResult<Job>>(url, null, ct);
+        }
+
+        private async Task PostAction(string action, string jobId, CancellationToken ct)
+        {
+            ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
+
+            var bodyParameters = new BodyParameters()
+                .AddNullParameter(action);
+
+            var url = $"jobs/{jobId}/action";
+            await _baseClient.PostAsync(url, bodyParameters, ct);
         }
     }
 }
