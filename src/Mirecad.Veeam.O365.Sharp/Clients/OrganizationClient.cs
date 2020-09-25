@@ -14,7 +14,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<VeeamCollectionResult<Organization>> GetOrganizations(CancellationToken ct = default)
+        public async Task<VeeamCollectionResult<Organization>> GetOrganizationsAsync(CancellationToken ct = default)
         {
             var url = "organizations";
             return await _baseClient.GetAsync<VeeamCollectionResult<Organization>>(url, null, ct);

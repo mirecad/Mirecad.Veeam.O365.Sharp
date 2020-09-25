@@ -14,7 +14,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<VeeamPagedResult<OrganizationGroup>> GetGroupsOfOrganization(string organizationId,
+        public async Task<VeeamPagedResult<OrganizationGroup>> GetGroupsOfOrganizationAsync(string organizationId,
             int? limit = null,
             int? offset = null,
             string setId = null,
@@ -38,7 +38,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             return await _baseClient.GetAsync<VeeamPagedResult<OrganizationGroup>>(url, parameters, ct);
         }
 
-        public async Task<OrganizationGroup> GetGroup(string organizationId, string userId, CancellationToken ct = default)
+        public async Task<OrganizationGroup> GetGroupAsync(string organizationId, string userId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
             ParameterValidator.ValidateNotNull(userId, nameof(userId));

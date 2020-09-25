@@ -8,10 +8,10 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
 {
     public interface IJobClient
     {
-        Task<VeeamCollectionResult<Job>> GetJobs(CancellationToken ct = default);
-        Task<Job> GetJob(string jobId, CancellationToken ct = default);
-        Task<VeeamCollectionResult<Job>> GetJobsOfOrganization(string organizationId, CancellationToken ct = default);
-        Task<Job> CreateJobForOrganization(string organizationId,
+        Task<VeeamCollectionResult<Job>> GetJobsAsync(CancellationToken ct = default);
+        Task<Job> GetJobAsync(string jobId, CancellationToken ct = default);
+        Task<VeeamCollectionResult<Job>> GetJobsOfOrganizationAsync(string organizationId, CancellationToken ct = default);
+        Task<Job> CreateJobForOrganizationAsync(string organizationId,
             string repositoryId,
             string name,
             string description,
@@ -22,10 +22,10 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             bool runNow,
             CancellationToken ct = default);
 
-        Task EnableJob(string jobId, CancellationToken ct = default);
-        Task DisableJob(string jobId, CancellationToken ct = default);
-        Task StartJob(string jobId, CancellationToken ct = default);
-        Task StopJob(string jobId, CancellationToken ct = default);
-        Task StartJobRestoreSession(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default);
+        Task EnableJobAsync(string jobId, CancellationToken ct = default);
+        Task DisableJobAsync(string jobId, CancellationToken ct = default);
+        Task StartJobAsync(string jobId, CancellationToken ct = default);
+        Task StopJobAsync(string jobId, CancellationToken ct = default);
+        Task StartJobRestoreSessionAsync(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default);
     }
 }

@@ -16,13 +16,13 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<VeeamCollectionResult<Job>> GetJobs(CancellationToken ct = default)
+        public async Task<VeeamCollectionResult<Job>> GetJobsAsync(CancellationToken ct = default)
         {
             var url = "jobs";
             return await _baseClient.GetAsync<VeeamCollectionResult<Job>>(url, null, ct);
         }
 
-        public async Task<Job> CreateJobForOrganization(string organizationId,
+        public async Task<Job> CreateJobForOrganizationAsync(string organizationId,
             string repositoryId,
             string name,
             string description,
@@ -49,27 +49,27 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             return await _baseClient.PostAsync<Job>(url, bodyParameters, ct);
         }
 
-        public async Task EnableJob(string jobId, CancellationToken ct = default)
+        public async Task EnableJobAsync(string jobId, CancellationToken ct = default)
         {
             await PostAction("enable", jobId, ct);
         }
 
-        public async Task DisableJob(string jobId, CancellationToken ct = default)
+        public async Task DisableJobAsync(string jobId, CancellationToken ct = default)
         {
             await PostAction("disable", jobId, ct);
         }
 
-        public async Task StartJob(string jobId, CancellationToken ct = default)
+        public async Task StartJobAsync(string jobId, CancellationToken ct = default)
         {
             await PostAction("start", jobId, ct);
         }
 
-        public async Task StopJob(string jobId, CancellationToken ct = default)
+        public async Task StopJobAsync(string jobId, CancellationToken ct = default)
         {
             await PostAction("stop", jobId, ct);
         }
 
-        public async Task StartJobRestoreSession(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
+        public async Task StartJobRestoreSessionAsync(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
 
@@ -80,7 +80,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             await _baseClient.PostAsync(url, bodyParameters, ct);
         }
 
-        public async Task<Job> GetJob(string jobId, CancellationToken ct = default)
+        public async Task<Job> GetJobAsync(string jobId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
 
@@ -88,7 +88,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             return await _baseClient.GetAsync<Job>(url, null, ct);
         }
 
-        public async Task<VeeamCollectionResult<Job>> GetJobsOfOrganization(string organizationId, CancellationToken ct = default)
+        public async Task<VeeamCollectionResult<Job>> GetJobsOfOrganizationAsync(string organizationId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
 

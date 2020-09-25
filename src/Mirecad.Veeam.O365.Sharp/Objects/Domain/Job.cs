@@ -38,29 +38,29 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
         public async Task<JobItemCollection> GetSelectedItemsAsync(CancellationToken ct = default)
             => await _linksSelectedItems.InvokeAsync(ct);
 
-        public async Task EnableJob(CancellationToken ct = default)
+        public async Task EnableJobAsync(CancellationToken ct = default)
         {
-            await _client.Jobs.StartJob(Id, ct);
+            await _client.Jobs.StartJobAsync(Id, ct);
         }
 
-        public async Task DisableJob(CancellationToken ct = default)
+        public async Task DisableJobAsync(CancellationToken ct = default)
         {
-            await _client.Jobs.DisableJob(Id, ct);
+            await _client.Jobs.DisableJobAsync(Id, ct);
         }
 
-        public async Task StartJob(CancellationToken ct = default)
+        public async Task StartJobAsync(CancellationToken ct = default)
         {
-            await _client.Jobs.StartJob(Id, ct);
+            await _client.Jobs.StartJobAsync(Id, ct);
         }
 
-        public async Task StopJob(CancellationToken ct = default)
+        public async Task StopJobAsync(CancellationToken ct = default)
         {
-            await _client.Jobs.StopJob(Id, ct);
+            await _client.Jobs.StopJobAsync(Id, ct);
         }
 
-        public async Task StartJobRestoreSession(RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
+        public async Task StartJobRestoreSessionAsync(RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
         {
-            await _client.Jobs.StartJobRestoreSession(Id, sessionDetails, ct);
+            await _client.Jobs.StartJobRestoreSessionAsync(Id, sessionDetails, ct);
         }
     }
 }

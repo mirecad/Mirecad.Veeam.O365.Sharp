@@ -6,13 +6,13 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
 {
     public interface IOrganizationSiteClient
     {
-        Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganization(string organizationId,
+        Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganizationAsync(string organizationId,
             int? limit = null,
             int? offset = null,
             string setId = null,
             CancellationToken ct = default
         );
 
-        Task<OrganizationSite> GetSite(string organizationId, string siteId, CancellationToken ct = default);
+        Task<OrganizationSite> GetSiteAsync(string organizationId, string siteId, CancellationToken ct = default);
     }
 }

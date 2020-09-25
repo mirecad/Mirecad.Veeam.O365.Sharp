@@ -14,7 +14,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganization(string organizationId, int? limit = null, int? offset = null, string setId = null,
+        public async Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganizationAsync(string organizationId, int? limit = null, int? offset = null, string setId = null,
             CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
@@ -28,7 +28,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             return await _baseClient.GetAsync<VeeamPagedResult<OrganizationSite>>(url, parameters, ct);
         }
 
-        public async Task<OrganizationSite> GetSite(string organizationId, string siteId, CancellationToken ct = default)
+        public async Task<OrganizationSite> GetSiteAsync(string organizationId, string siteId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
             ParameterValidator.ValidateNotNull(siteId, nameof(siteId));

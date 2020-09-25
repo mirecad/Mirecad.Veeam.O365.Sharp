@@ -14,7 +14,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<BackupRepository> GetBackupRepository(string repositoryId, CancellationToken ct = default)
+        public async Task<BackupRepository> GetBackupRepositoryAsync(string repositoryId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(repositoryId, nameof(repositoryId));
             var url = $"backuprepositories/{repositoryId}";
