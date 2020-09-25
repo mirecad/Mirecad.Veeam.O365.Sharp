@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
-using Mirecad.Veeam.O365.Sharp.Infrastructure.Http;
 using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
@@ -58,9 +57,9 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
             await _client.Jobs.StopJobAsync(Id, ct);
         }
 
-        public async Task StartJobRestoreSessionAsync(RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
+        public async Task<RestoreSession> StartJobRestoreSessionAsync(RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
         {
-            await _client.Jobs.StartJobRestoreSessionAsync(Id, sessionDetails, ct);
+            return await _client.Jobs.StartJobRestoreSessionAsync(Id, sessionDetails, ct);
         }
     }
 }

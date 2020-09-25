@@ -69,7 +69,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             await PostAction("stop", jobId, ct);
         }
 
-        public async Task StartJobRestoreSessionAsync(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
+        public async Task<RestoreSession> StartJobRestoreSessionAsync(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
 
@@ -77,7 +77,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
                 .AddMandatoryParameter("explore", sessionDetails);
 
             var url = $"jobs/{jobId}/action";
-            await _baseClient.PostAsync(url, bodyParameters, ct);
+            return await _baseClient.PostAsync<RestoreSession>(url, bodyParameters, ct);
         }
 
         public async Task<Job> GetJobAsync(string jobId, CancellationToken ct = default)
