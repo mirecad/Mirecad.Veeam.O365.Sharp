@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Mirecad.Veeam.O365.Sharp.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -20,14 +21,22 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             _client = client;
         }
 
-        protected virtual async Task<T> SendAsync<T>(Uri url, HttpMethod method, CancellationToken cancellationToken,
+        protected virtual async Task<ApiCallResponse<T>> SendAsync<T>(Uri url, HttpMethod method, CancellationToken cancellationToken,
             QueryParameters queryParameters = null, BodyParameters bodyParameters = null) where T : class
         {
             var urlString = ConstructUrlString(url, queryParameters);
             using var requestMessage = ConstructRequestMessage(method, urlString, bodyParameters);
-
             using var response = await _client.SendAsync(requestMessage, cancellationToken);
             return await ProcessResponseAsync<T>(response);
+        }
+
+        protected virtual async Task<ApiCallResponse> SendAsync(Uri url, HttpMethod method, CancellationToken cancellationToken,
+            QueryParameters queryParameters = null, BodyParameters bodyParameters = null)
+        {
+            var urlString = ConstructUrlString(url, queryParameters);
+            using var requestMessage = ConstructRequestMessage(method, urlString, bodyParameters);
+            using var response = await _client.SendAsync(requestMessage, cancellationToken);
+            return await ProcessResponseAsync(response);
         }
 
         private string ConstructUrlString(Uri url, QueryParameters queryParameters)
@@ -56,23 +65,34 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
 
         private HttpRequestMessage ConstructRequestMessage(HttpMethod method, string url, BodyParameters bodyParameters)
         {
-            var parameters = bodyParameters?.GetParameters()
-                             ?? new Dictionary<string, object>();
-
-            var jsonString = ConvertToJson(parameters);
+            var jsonString = ConvertToJson(bodyParameters);
             var request = new HttpRequestMessage(method, url);
             request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
             return request;
         }
 
-        private static async Task<T> ProcessResponseAsync<T>(HttpResponseMessage response)
+        private async Task<ApiCallResponse<T>> ProcessResponseAsync<T>(HttpResponseMessage response)
         {
-            response.EnsureSuccessStatusCode();
             var stringContent = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(stringContent);
+            var content = JsonConvert.DeserializeObject<T>(stringContent);
+            return new ApiCallResponse<T>
+            {
+                Content = content,
+                StatusCode = response.StatusCode,
+                StringContent = stringContent
+            };
         }
 
-        private string ConvertToJson(Dictionary<string, object> parameters)
+        private async Task<ApiCallResponse> ProcessResponseAsync(HttpResponseMessage response)
+        {
+            return new ApiCallResponse()
+            {
+                StatusCode = response.StatusCode,
+                StringContent = await response.Content.ReadAsStringAsync()
+            };
+        }
+
+        private string ConvertToJson(BodyParameters parameters)
         {
             var jsonSettings = CreateJsonSerializerSettings();
             var jsonString = JsonConvert.SerializeObject(parameters, jsonSettings);
@@ -86,6 +106,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
                 NullValueHandling = NullValueHandling.Ignore
             };
             jsonSettings.Converters.Add(new StringEnumConverter());
+            jsonSettings.Converters.Add(new BodyParametersConverter());
             return jsonSettings;
         }
     }

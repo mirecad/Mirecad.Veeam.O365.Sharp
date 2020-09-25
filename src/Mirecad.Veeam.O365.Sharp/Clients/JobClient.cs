@@ -19,7 +19,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
         public async Task<VeeamCollectionResult<Job>> GetJobs(CancellationToken ct = default)
         {
             var url = "jobs";
-            return await _baseClient.GetDomainObjectAsync<VeeamCollectionResult<Job>>(url, null, ct);
+            return await _baseClient.GetAsync<VeeamCollectionResult<Job>>(url, null, ct);
         }
 
         public async Task<Job> CreateJobForOrganization(string organizationId,
@@ -46,7 +46,18 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
                 .AddOptionalParameter("RunNow", runNow);
 
             var url = $"organizations/{organizationId}/jobs";
-            return await _baseClient.PostDomainObjectAsync<Job>(url, bodyParameters, ct);
+            return await _baseClient.PostAsync<Job>(url, bodyParameters, ct);
+        }
+
+        public async Task StartJob(string jobId, CancellationToken ct = default)
+        {
+            ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
+
+            var bodyParameters = new BodyParameters()
+                .AddNullParameter("start");
+
+            var url = $"jobs/{jobId}/action";
+            await _baseClient.PostAsync(url, bodyParameters, ct);
         }
 
         public async Task<Job> GetJob(string jobId, CancellationToken ct = default)
@@ -54,7 +65,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             ParameterValidator.ValidateNotNull(jobId, nameof(jobId));
 
             var url = $"jobs/{jobId}";
-            return await _baseClient.GetDomainObjectAsync<Job>(url, null, ct);
+            return await _baseClient.GetAsync<Job>(url, null, ct);
         }
 
         public async Task<VeeamCollectionResult<Job>> GetJobsOfOrganization(string organizationId, CancellationToken ct = default)
@@ -62,7 +73,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
 
             var url = $"organizations/{organizationId}/jobs";
-            return await _baseClient.GetDomainObjectAsync<VeeamCollectionResult<Job>>(url, null, ct);
+            return await _baseClient.GetAsync<VeeamCollectionResult<Job>>(url, null, ct);
         }
     }
 }

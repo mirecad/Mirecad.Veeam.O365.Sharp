@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -60,6 +61,12 @@ namespace Mirecad.Veeam.O365.Sharp.Helpers
             dynamic awaitable = @this.Invoke(obj, parameters);
             await awaitable;
             return awaitable.GetAwaiter().GetResult();
+        }
+
+        public static bool IsSuccessStatusCode(this HttpStatusCode statusCode)
+        {
+            var asInt = (int)statusCode;
+            return asInt >= 200 && asInt <= 299;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
         {
             ParameterValidator.ValidateNotNull(repositoryId, nameof(repositoryId));
             var url = $"backuprepositories/{repositoryId}";
-            return await _baseClient.GetDomainObjectAsync<BackupRepository>(url, null, ct);
+            return await _baseClient.GetAsync<BackupRepository>(url, null, ct);
         }
     }
 }

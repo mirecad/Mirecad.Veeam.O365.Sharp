@@ -63,15 +63,9 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <param name="url">Full url path to resource.</param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        internal async Task<T> GetDomainObjectByFullUrlAsync<T>(string url, CancellationToken ct) where T : class
+        internal async Task<T> GetByFullUrlAsync<T>(string url, CancellationToken ct) where T : class
         {
-            Type dtoType = _dtoResolver.GetDataTransferObjectRecursive(typeof(T));
-            var method = this.GetType().GetMethod("GetFullUrlAsync", BindingFlags.NonPublic | BindingFlags.Instance)
-                .MakeGenericMethod(dtoType);
-            var resultDto = Convert.ChangeType(
-                await method.InvokeAsync(this, new object[] { url, ct }),
-                dtoType);
-            return _mapper.Map<T>(resultDto);
+            return await ProcessApiCallAsync<T>(new Uri(url), HttpMethod.Get, null, null, ct);
         }
 
         /// <summary>
@@ -84,15 +78,23 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <param name="queryParameters">Url parameters.</param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        internal async Task<T> GetDomainObjectAsync<T>(string endpoint, QueryParameters queryParameters, CancellationToken ct) where T : class
+        internal async Task<T> GetAsync<T>(string endpoint, QueryParameters queryParameters, CancellationToken ct) where T : class
         {
-            Type dtoType = _dtoResolver.GetDataTransferObjectRecursive(typeof(T));
-            var method = this.GetType().GetMethod("GetAsync", BindingFlags.NonPublic | BindingFlags.Instance)
-                .MakeGenericMethod(dtoType);
-            var resultDto = Convert.ChangeType(
-                await method.InvokeAsync(this, new object[] {endpoint, queryParameters, ct}),
-                dtoType);
-            return _mapper.Map<T>(resultDto);
+            return await ProcessApiCallAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Get, queryParameters, null, ct);
+        }
+
+        /// <summary>
+        /// Make API POST request.
+        /// </summary>
+        /// <param name="endpoint">Relative API url.</param>
+        /// <param name="bodyParameters">Body content parameters.</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        internal async Task PostAsync(string endpoint, BodyParameters bodyParameters, CancellationToken ct)
+        {
+            var parametersAsDTOs = ConvertToDtoBodyParameters(bodyParameters);
+            var apiResponse = await SendAsync(ConstructEndpointPath(endpoint), HttpMethod.Post, ct, bodyParameters: parametersAsDTOs);
+            EnsureSuccessfullApiResponse(apiResponse);
         }
 
         /// <summary>
@@ -103,16 +105,23 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <param name="bodyParameters">Body content parameters.</param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        internal async Task<T> PostDomainObjectAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
+        internal async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
         {
-            var parametersAsDtos = ConvertToDtoBodyParameters(bodyParameters);
+            return await ProcessApiCallAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, null, bodyParameters, ct);
+        }
+
+        private async Task<T> ProcessApiCallAsync<T>(Uri fullUrl, HttpMethod httpMethod, QueryParameters queryParameters,
+            BodyParameters bodyParameters, CancellationToken ct) where T : class
+        {
+            var parametersAsDTOs = ConvertToDtoBodyParameters(bodyParameters);
             Type dtoType = _dtoResolver.GetDataTransferObjectRecursive(typeof(T));
-            var method = this.GetType().GetMethod("PostAsync", BindingFlags.NonPublic | BindingFlags.Instance)
-                .MakeGenericMethod(dtoType);
-            var resultDto = Convert.ChangeType(
-                await method.InvokeAsync(this, new object[] { endpoint, parametersAsDtos, ct }),
-                dtoType);
-            return _mapper.Map<T>(resultDto);
+            var sendMethod = CreateGenericSendAsyncMethodInfo(dtoType);
+            var apiCallResponseType = typeof(ApiCallResponse<>).MakeGenericType(dtoType);
+            var apiResponse = Convert.ChangeType(
+                await sendMethod.InvokeAsync(this, new object[] { fullUrl, httpMethod, ct, queryParameters, parametersAsDTOs }),
+                apiCallResponseType);
+            EnsureSuccessfullApiResponse((ApiCallResponse)apiResponse);
+            return _mapper.Map<T>(((dynamic)apiResponse).Content);
         }
 
         /// <summary>
@@ -137,19 +146,17 @@ namespace Mirecad.Veeam.O365.Sharp
             OrganizationGroups = new OrganizationGroupClient(this);
         }
 
-        private async Task<T> GetFullUrlAsync<T>(string url, CancellationToken ct) where T : class
+        /// <summary>
+        /// Throws exception in case of non successful HTTP status code.
+        /// </summary>
+        /// <param name="apiResponse"></param>
+        private void EnsureSuccessfullApiResponse(ApiCallResponse apiResponse)
         {
-            return await base.SendAsync<T>(new Uri(url), HttpMethod.Get, ct);
-        }
-
-        private async Task<T> GetAsync<T>(string endpoint, QueryParameters queryParameters, CancellationToken ct) where T : class 
-        {
-            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Get, ct, queryParameters);
-        }
-
-        private async Task<T> PostAsync<T>(string endpoint, BodyParameters bodyParameters, CancellationToken ct) where T : class
-        {
-            return await base.SendAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, bodyParameters: bodyParameters, cancellationToken: ct);
+            var unsuccessfulResponse = false == apiResponse.StatusCode.IsSuccessStatusCode();
+            if (unsuccessfulResponse)
+            {
+                throw new ApiCallException($"Api returned status code {(int)apiResponse.StatusCode}: {apiResponse.StringContent}");
+            }
         }
 
         private Uri ConstructEndpointPath(string endpoint)
@@ -169,11 +176,23 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <returns></returns>
         private BodyParameters ConvertToDtoBodyParameters(BodyParameters parameters)
         {
+            if (parameters == null)
+            {
+                return null;
+            }
+
             var convertedParameters = new BodyParameters();
 
             foreach (var bodyParameter in parameters.GetParameters())
             {
                 var parameter = bodyParameter.Value;
+
+                if (parameter == null)
+                {
+                    convertedParameters.AddNullParameter(bodyParameter.Key);
+                    continue;
+                }
+
                 if (_dtoResolver.HasDataTransferObjectAssociated(parameter.GetType()))
                 {
                     var dtoType = _dtoResolver.GetDataTransferObjectRecursive(parameter.GetType());
@@ -191,6 +210,14 @@ namespace Mirecad.Veeam.O365.Sharp
             }
 
             return convertedParameters;
+        }
+
+        private MethodInfo CreateGenericSendAsyncMethodInfo(Type dtoType)
+        {
+            return this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Single(x => x.Name == "SendAsync"
+                             && x.IsGenericMethod)
+                .MakeGenericMethod(dtoType);
         }
 
         protected virtual void Dispose(bool disposing)

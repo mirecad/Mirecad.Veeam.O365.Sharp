@@ -35,7 +35,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
                 .AddOptionalParameter("displayName", displayName);
 
             var url = $"organizations/{organizationId}/users";
-            return await _baseClient.GetDomainObjectAsync<VeeamPagedResult<OrganizationUser>>(url, parameters, ct);
+            return await _baseClient.GetAsync<VeeamPagedResult<OrganizationUser>>(url, parameters, ct);
         }
 
         public async Task<OrganizationUser> GetUser(string organizationId, string userId, CancellationToken ct = default)
@@ -44,7 +44,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             ParameterValidator.ValidateNotNull(userId, nameof(userId));
 
             var url = $"organizations/{organizationId}/users/{userId}";
-            return await _baseClient.GetDomainObjectAsync<OrganizationUser>(url, null, ct);
+            return await _baseClient.GetAsync<OrganizationUser>(url, null, ct);
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Mirecad.Veeam.O365.Sharp.Objects.Domain;
-using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 using Mirecad.Veeam.O365.Sharp.Objects.Enums;
 
 namespace Mirecad.Veeam.O365.Sharp.Clients
@@ -22,5 +21,11 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             string proxyId,
             bool runNow,
             CancellationToken ct = default);
+
+        //Task EnableJob(string jobId, CancellationToken ct = default);
+        //Task DisableJob(string jobId, CancellationToken ct = default);
+        Task StartJob(string jobId, CancellationToken ct = default);
+        //Task StopJob(string jobId, CancellationToken ct = default);
+        //Task StartJobRestoreSession(string jobId, CancellationToken ct = default);
     }
 }
