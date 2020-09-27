@@ -29,6 +29,7 @@ namespace Mirecad.Veeam.O365.Sharp
         public IOrganizationUserClient OrganizationUsers { get; private set; }
         public IOrganizationSiteClient OrganizationSites { get; private set; }
         public IOrganizationGroupClient OrganizationGroups { get; private set; }
+        public IRestoreSessionClient RestoreSessions { get; private set; }
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
@@ -144,6 +145,7 @@ namespace Mirecad.Veeam.O365.Sharp
             OrganizationUsers = new OrganizationUserClient(this);
             OrganizationSites = new OrganizationSiteClient(this);
             OrganizationGroups = new OrganizationGroupClient(this);
+            RestoreSessions = new RestoreSessionClient(this);
         }
 
         /// <summary>

@@ -10,5 +10,6 @@ namespace Mirecad.Veeam.O365.Sharp
         IOrganizationSiteClient OrganizationSites { get; }
         IOrganizationGroupClient OrganizationGroups { get; }
         IBackupRepositoryClient BackupRepositories { get; }
+        IRestoreSessionClient RestoreSessions { get; }
     }
 }
