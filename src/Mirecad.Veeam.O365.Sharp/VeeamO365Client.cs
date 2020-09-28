@@ -110,6 +110,22 @@ namespace Mirecad.Veeam.O365.Sharp
             return await ProcessApiCallAsync<T>(ConstructEndpointPath(endpoint), HttpMethod.Post, null, bodyParameters, ct);
         }
 
+        /// <summary>
+        /// Make POST request and save response to a file.
+        /// </summary>
+        /// <param name="targetFile">Path to result file.</param>
+        /// <param name="endpoint">Relative API url.</param>
+        /// <param name="bodyParameters">Body content parameters.</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        internal async Task DownloadToFilePostAsync(string targetFile, string endpoint, BodyParameters bodyParameters,
+            CancellationToken ct)
+        {
+            var parametersAsDTOs = ConvertToDtoBodyParameters(bodyParameters);
+            var apiResponse = await DownloadToFileAsync(targetFile, ConstructEndpointPath(endpoint), HttpMethod.Post, ct, bodyParameters: parametersAsDTOs);
+            EnsureSuccessfullApiResponse(apiResponse);
+        }
+
         private async Task<T> ProcessApiCallAsync<T>(Uri fullUrl, HttpMethod httpMethod, QueryParameters queryParameters,
             BodyParameters bodyParameters, CancellationToken ct) where T : class
         {
