@@ -1,13 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Base;
 using Mirecad.Veeam.O365.Sharp.Objects.Common;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(JobDto))]
-    public class Job : JobDto
+    public class Job : JobBase
     {
         private readonly VeeamO365Client _client;
 

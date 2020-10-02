@@ -25,11 +25,11 @@ namespace Mirecad.Veeam.O365.Sharp
 
         public IBackupRepositoryClient BackupRepositories { get; private set; }
         public IJobClient Jobs { get; private set; }
+        public IOneDriveClient OneDrives { get; private set; }
         public IOrganizationClient Organizations { get; private set; }
         public IOrganizationUserClient OrganizationUsers { get; private set; }
         public IOrganizationSiteClient OrganizationSites { get; private set; }
         public IOrganizationGroupClient OrganizationGroups { get; private set; }
-        public IRestoreSessionClient RestoreSessions { get; private set; }
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
@@ -49,7 +49,8 @@ namespace Mirecad.Veeam.O365.Sharp
             var handler = new OAuthLoginHandler($"{options.BaseAddress}v{ApiVersion}/token", options.Username, options.Password);
             var client = new HttpClient(handler)
             {
-                BaseAddress = options.BaseAddress
+                BaseAddress = options.BaseAddress,
+                Timeout = options.HttpTimeout
             };
             var dtoResolver = new DataTransferObjectResolver();
             return new VeeamO365Client(client, options.BaseAddress, dtoResolver);
@@ -157,11 +158,11 @@ namespace Mirecad.Veeam.O365.Sharp
 
             BackupRepositories = new BackupRepositoryClient(this);
             Jobs = new JobClient(this);
+            OneDrives = new OneDriveClient(this);
             Organizations = new OrganizationClient(this);
             OrganizationUsers = new OrganizationUserClient(this);
             OrganizationSites = new OrganizationSiteClient(this);
             OrganizationGroups = new OrganizationGroupClient(this);
-            RestoreSessions = new RestoreSessionClient(this);
         }
 
         /// <summary>

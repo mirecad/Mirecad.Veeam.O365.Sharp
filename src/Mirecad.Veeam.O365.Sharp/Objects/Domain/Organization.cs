@@ -1,12 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Base;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(OrganizationDto))]
-    public class Organization : OrganizationDto
+    public class Organization : OrganizationBase
     {
         private VeeamLink<VeeamCollectionResult<Job>> _linksJobs;
         private VeeamLink<VeeamPagedResult<OrganizationGroup>> _linksGroups;
