@@ -1,12 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Base;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
 {
     [DataTransferObject(typeof(OrganizationSiteDto))]
-    public class OrganizationSite : OrganizationSiteDto
+    public class OrganizationSite : OrganizationSiteBase
     {
         private VeeamLink<VeeamPagedResult<OrganizationSite>> _linksChildren;
         private VeeamLink<Organization> _linksOrganization;

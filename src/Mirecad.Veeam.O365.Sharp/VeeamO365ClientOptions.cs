@@ -26,11 +26,17 @@ namespace Mirecad.Veeam.O365.Sharp
         /// </summary>
         public SecureString Password { get; }
 
-        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password)
+        /// <summary>
+        /// Timeout for http requests. Default is one minute.
+        /// </summary>
+        public TimeSpan HttpTimeout { get; }
+
+        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password, TimeSpan? httpTimeout = null)
         {
             BaseAddress = baseAddress;
             Username = username;
             Password = password;
+            HttpTimeout = httpTimeout ?? TimeSpan.FromMinutes(1);
         }
     }
 }

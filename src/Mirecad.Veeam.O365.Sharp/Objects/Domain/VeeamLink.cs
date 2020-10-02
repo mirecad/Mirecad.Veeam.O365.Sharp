@@ -30,7 +30,7 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
                 throw new InvalidOperationException("Uri for this link was not provided.");
             }
 
-            return await _client.GetDomainObjectByFullUrlAsync<T>(Href, ct);
+            return await _client.GetByFullUrlAsync<T>(Href, ct);
         }
     }
 }

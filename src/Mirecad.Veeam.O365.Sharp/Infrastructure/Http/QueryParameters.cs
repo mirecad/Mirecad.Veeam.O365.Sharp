@@ -4,12 +4,12 @@
     {
         public QueryParameters AddOptionalParameter(string key, object value)
         {
-            return base.AddOptionalParameter(key, value?.ToString()) as QueryParameters;
+            return base.AddOptionalApiParameter(key, value?.ToString()) as QueryParameters;
         }
 
         public QueryParameters AddMandatoryParameter(string key, object value)
         {
-            return base.AddMandatoryParameter(key, value?.ToString()) as QueryParameters;
+            return base.AddMandatoryApiParameter(key, value?.ToString()) as QueryParameters;
         }
     }
 }

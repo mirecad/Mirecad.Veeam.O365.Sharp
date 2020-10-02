@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Mirecad.Veeam.O365.Sharp.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -20,20 +22,78 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             _client = client;
         }
 
-        protected virtual async Task<T> SendAsync<T>(Uri url, HttpMethod method, CancellationToken cancellationToken,
+        /// <summary>
+        /// Executes given HTTP method and parses response to expected return type.
+        /// </summary>
+        /// <typeparam name="T">Expected return type from API.</typeparam>
+        /// <param name="url">Full resource URL.</param>
+        /// <param name="method">HTTP method.</param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="queryParameters">URL parameters.</param>
+        /// <param name="bodyParameters">Parameters, that will be sent in body of the request.</param>
+        /// <returns></returns>
+        protected virtual async Task<ApiCallResponse<T>> SendAsync<T>(Uri url, HttpMethod method, CancellationToken cancellationToken,
             QueryParameters queryParameters = null, BodyParameters bodyParameters = null) where T : class
         {
-            var urlString = ConstructUrlString(url, queryParameters);
-            using var requestMessage = ConstructRequestMessage(method, urlString, bodyParameters);
-
+            using var requestMessage = ConstructRequestMessage(method, url, queryParameters, bodyParameters);
             using var response = await _client.SendAsync(requestMessage, cancellationToken);
             return await ProcessResponseAsync<T>(response);
+        }
+
+        /// <summary>
+        /// Executes given HTTP method. Does not expect any response.
+        /// </summary>
+        /// <param name="url">Full resource URL.</param>
+        /// <param name="method">HTTP method.</param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="queryParameters">URL parameters.</param>
+        /// <param name="bodyParameters">Parameters, that will be sent in body of the request.</param>
+        /// <returns></returns>
+        protected virtual async Task<ApiCallResponse> SendAsync(Uri url, HttpMethod method, CancellationToken cancellationToken,
+            QueryParameters queryParameters = null, BodyParameters bodyParameters = null)
+        {
+            using var requestMessage = ConstructRequestMessage(method, url, queryParameters, bodyParameters);
+            using var response = await _client.SendAsync(requestMessage, cancellationToken);
+            return await ProcessResponseAsync(response);
+        }
+
+        /// <summary>
+        /// Executes given HTTP method and saves returned data to file. Method is capable of downloading large files.
+        /// Data is not stored in memory, but is written directly to file on disk.
+        /// </summary>
+        /// <param name="targetFile">Returned data will be written to this file.</param>
+        /// <param name="url">Full resource URL.</param>
+        /// <param name="method">HTTP method.</param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="queryParameters">URL parameters.</param>
+        /// <param name="bodyParameters">Parameters, that will be sent in body of the request.</param>
+        /// <returns></returns>
+        protected virtual async Task<ApiCallResponse> DownloadToFileAsync(string targetFile, Uri url, HttpMethod method,
+            CancellationToken cancellationToken, QueryParameters queryParameters = null, BodyParameters bodyParameters = null)
+        {
+            using var requestMessage = ConstructRequestMessage(method, url, queryParameters, bodyParameters);
+            using var response = await _client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var apiCallResponse = await ProcessResponseAsync(response);
+            using Stream streamToReadFrom = await response.Content.ReadAsStreamAsync();
+            using Stream streamToWriteTo = File.Open(targetFile, FileMode.Create);
+            await streamToReadFrom.CopyToAsync(streamToWriteTo);
+
+            return apiCallResponse;
+        }
+
+        private HttpRequestMessage ConstructRequestMessage(HttpMethod method, Uri url, QueryParameters queryParameters, BodyParameters bodyParameters)
+        {
+            var urlString = ConstructUrlString(url, queryParameters);
+            var jsonString = ConvertToJson(bodyParameters);
+            var request = new HttpRequestMessage(method, urlString);
+            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            return request;
         }
 
         private string ConstructUrlString(Uri url, QueryParameters queryParameters)
         {
             var parameters = queryParameters?.GetParameters()
-                ?? new Dictionary<string, string>();
+                             ?? new Dictionary<string, string>();
             var stringBuilder = new StringBuilder(url.ToString());
             if (parameters.Any() == false)
             {
@@ -54,25 +114,28 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             return urlString;
         }
 
-        private HttpRequestMessage ConstructRequestMessage(HttpMethod method, string url, BodyParameters bodyParameters)
+        private async Task<ApiCallResponse<T>> ProcessResponseAsync<T>(HttpResponseMessage response)
         {
-            var parameters = bodyParameters?.GetParameters()
-                             ?? new Dictionary<string, object>();
-
-            var jsonString = ConvertToJson(parameters);
-            var request = new HttpRequestMessage(method, url);
-            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-            return request;
-        }
-
-        private static async Task<T> ProcessResponseAsync<T>(HttpResponseMessage response)
-        {
-            response.EnsureSuccessStatusCode();
             var stringContent = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(stringContent);
+            var content = JsonConvert.DeserializeObject<T>(stringContent);
+            return new ApiCallResponse<T>
+            {
+                Content = content,
+                StatusCode = response.StatusCode,
+                StringContent = stringContent
+            };
         }
 
-        private string ConvertToJson(Dictionary<string, object> parameters)
+        private async Task<ApiCallResponse> ProcessResponseAsync(HttpResponseMessage response)
+        {
+            return new ApiCallResponse()
+            {
+                StatusCode = response.StatusCode,
+                StringContent = await response.Content.ReadAsStringAsync()
+            };
+        }
+
+        private string ConvertToJson(BodyParameters parameters)
         {
             var jsonSettings = CreateJsonSerializerSettings();
             var jsonString = JsonConvert.SerializeObject(parameters, jsonSettings);
@@ -86,6 +149,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
                 NullValueHandling = NullValueHandling.Ignore
             };
             jsonSettings.Converters.Add(new StringEnumConverter());
+            jsonSettings.Converters.Add(new BodyParametersConverter());
             return jsonSettings;
         }
     }

@@ -14,7 +14,10 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             _baseClient = baseClient;
         }
 
-        public async Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganization(string organizationId, int? limit = null, int? offset = null, string setId = null,
+        public async Task<VeeamPagedResult<OrganizationSite>> GetSitesOfOrganizationAsync(string organizationId, 
+            int? limit = null, 
+            int? offset = null, 
+            string setId = null,
             CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
@@ -25,16 +28,16 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
                 .AddOptionalParameter("setId", setId);
 
             var url = $"organizations/{organizationId}/sites";
-            return await _baseClient.GetDomainObjectAsync<VeeamPagedResult<OrganizationSite>>(url, parameters, ct);
+            return await _baseClient.GetAsync<VeeamPagedResult<OrganizationSite>>(url, parameters, ct);
         }
 
-        public async Task<OrganizationSite> GetSite(string organizationId, string siteId, CancellationToken ct = default)
+        public async Task<OrganizationSite> GetSiteAsync(string organizationId, string siteId, CancellationToken ct = default)
         {
             ParameterValidator.ValidateNotNull(organizationId, nameof(organizationId));
             ParameterValidator.ValidateNotNull(siteId, nameof(siteId));
 
             var url = $"organizations/{organizationId}/users/{siteId}";
-            return await _baseClient.GetDomainObjectAsync<OrganizationSite>(url, null, ct);
+            return await _baseClient.GetAsync<OrganizationSite>(url, null, ct);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
 {
     public interface IOrganizationUserClient
     {
-        Task<VeeamPagedResult<OrganizationUser>> GetUsersOfOrganization(string organizationId,
+        Task<VeeamPagedResult<OrganizationUser>> GetUsersOfOrganizationAsync(string organizationId,
             int? limit = null,
             int? offset = null,
             string setId = null,
@@ -16,6 +16,6 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
             CancellationToken ct = default
         );
 
-        Task<OrganizationUser> GetUser(string organizationId, string userId, CancellationToken ct = default);
+        Task<OrganizationUser> GetUserAsync(string organizationId, string userId, CancellationToken ct = default);
     }
 }

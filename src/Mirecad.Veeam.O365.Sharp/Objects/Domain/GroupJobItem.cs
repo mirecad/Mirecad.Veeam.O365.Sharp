@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mirecad.Veeam.O365.Sharp.Infrastructure.Attributes;
+using Mirecad.Veeam.O365.Sharp.Objects.Base;
 using Mirecad.Veeam.O365.Sharp.Objects.DTOs;
 
 namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
@@ -9,6 +10,7 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
     public class GroupJobItem : GroupJobItemBase
     {
         private VeeamLink<Job> _linksJob;
+
         public  OrganizationGroup Group { get; set; }
 
         public async Task<Job> GetJobAsync(CancellationToken ct = default)

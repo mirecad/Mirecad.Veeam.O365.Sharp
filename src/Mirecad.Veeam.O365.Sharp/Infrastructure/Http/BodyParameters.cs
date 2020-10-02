@@ -2,14 +2,19 @@
 {
     public class BodyParameters : ApiCallParameters<object>
     {
-        public new BodyParameters AddOptionalParameter(string key, object value)
+        public BodyParameters AddOptionalParameter(string key, object value)
         {
-            return base.AddOptionalParameter(key, value) as BodyParameters;
+            return base.AddOptionalApiParameter(key, value) as BodyParameters;
         }
 
-        public new BodyParameters AddMandatoryParameter(string key, object value)
+        public BodyParameters AddMandatoryParameter(string key, object value)
         {
-            return base.AddMandatoryParameter(key, value) as BodyParameters;
+            return base.AddMandatoryApiParameter(key, value) as BodyParameters;
+        }
+
+        public BodyParameters AddNullParameter(string key)
+        {
+            return base.AddNullApiParameter(key) as BodyParameters;
         }
     }
 }

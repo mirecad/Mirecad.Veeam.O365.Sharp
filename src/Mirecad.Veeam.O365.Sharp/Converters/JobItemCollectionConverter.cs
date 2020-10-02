@@ -15,7 +15,7 @@ namespace Mirecad.Veeam.O365.Sharp.Converters
                 throw new ArgumentException($"This Json converter can convert only objects of type {nameof(JobItemCollectionDto)}");
             }
 
-            JobItemCollectionDto jobItemsCol = (JobItemCollectionDto)value;
+            var jobItemsCol = (JobItemCollectionDto)value;
             writer.WriteStartArray();
             foreach (var organization in jobItemsCol.PartialOrganizations)
             {

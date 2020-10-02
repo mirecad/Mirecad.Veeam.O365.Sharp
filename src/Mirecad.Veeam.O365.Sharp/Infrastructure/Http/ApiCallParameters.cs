@@ -2,7 +2,7 @@
 
 namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
 {
-    public abstract class ApiCallParameters<T>
+    public abstract class ApiCallParameters<T> where T : class
     {
         private Dictionary<string, T> _parameters;
 
@@ -11,7 +11,13 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             _parameters = new Dictionary<string, T>();
         }
 
-        public ApiCallParameters<T> AddOptionalParameter(string key, T value)
+        protected ApiCallParameters<T> AddNullApiParameter(string key)
+        {
+            _parameters.Add(key, null);
+            return this;
+        }
+
+        protected ApiCallParameters<T> AddOptionalApiParameter(string key, T value)
         {
             if (value != null)
             {
@@ -20,7 +26,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             return this;
         }
 
-        public ApiCallParameters<T> AddMandatoryParameter(string key, T value)
+        protected ApiCallParameters<T> AddMandatoryApiParameter(string key, T value)
         {
             ParameterValidator.ValidateNotNull(value, key);
             _parameters.Add(key, value);

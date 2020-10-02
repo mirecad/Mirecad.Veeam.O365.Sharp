@@ -6,6 +6,6 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
 {
     public interface IBackupRepositoryClient
     {
-        Task<BackupRepository> GetBackupRepository(string repositoryId, CancellationToken ct = default);
+        Task<BackupRepository> GetBackupRepositoryAsync(string repositoryId, CancellationToken ct = default);
     }
 }
