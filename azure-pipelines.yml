@@ -14,6 +14,20 @@ steps:
     command: 'restore'
     feedsToUse: 'select'
 
+- task: gitversion/setup@0
+  displayName: Install GitVersion
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  inputs:
+    versionSpec: '5.3.7'
+
+- task: gitversion/execute@0
+  displayName: gitversion execute
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  inputs:
+    targetPath: '.\'
+    additionalArguments: '/output buildserver /nofetch'
+    updateAssemblyInfo: false
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
