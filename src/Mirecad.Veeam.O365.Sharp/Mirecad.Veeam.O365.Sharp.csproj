@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Miroslav Adamec</Authors>
+    <Description>C# REST API wrapper for Veeam Backup for Microsoft Office 365</Description>
+    <PackageProjectUrl>https://github.com/mirecad/Mirecad.Veeam.O365.Sharp</PackageProjectUrl>
+    <PackageTags>veeam o365 microsoft office wrapper sharp</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
