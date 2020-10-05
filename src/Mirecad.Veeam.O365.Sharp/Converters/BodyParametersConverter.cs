@@ -7,7 +7,7 @@ namespace Mirecad.Veeam.O365.Sharp.Converters
 {
     public class BodyParametersConverter : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             bool notCorrectTypeOfValue = false == value is BodyParameters;
             if (notCorrectTypeOfValue)
@@ -32,7 +32,7 @@ namespace Mirecad.Veeam.O365.Sharp.Converters
             writer.WriteEndObject();
         }
 
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }

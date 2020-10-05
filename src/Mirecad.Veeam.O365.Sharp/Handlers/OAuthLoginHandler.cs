@@ -55,16 +55,22 @@ namespace Mirecad.Veeam.O365.Sharp.Handlers
                 {"username", _credential.UserName},
                 {"password", _credential.Password}
             };
-            using var content = new FormUrlEncodedContent(payload);
-            using var request = new HttpRequestMessage(HttpMethod.Post, _authEndpoint) {Content = content};
+            using (var content = new FormUrlEncodedContent(payload))
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Post, _authEndpoint) {Content = content})
+                {
+                    using (var response = base.SendAsync(request, cancelationToken).ConfigureAwait(false).GetAwaiter()
+                        .GetResult())
+                    {
+                        response.EnsureSuccessStatusCode();
 
-            using var response = base.SendAsync(request, cancelationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
-
-            string responseString = response.Content.ReadAsStringAsync().Result;
-            dynamic responseContent = JsonConvert.DeserializeObject(responseString);
-            _bearerToken = responseContent.access_token;
-            _tokenExpiresOnUtc = responseContent[".expires"];
+                        string responseString = response.Content.ReadAsStringAsync().Result;
+                        dynamic responseContent = JsonConvert.DeserializeObject(responseString);
+                        _bearerToken = responseContent.access_token;
+                        _tokenExpiresOnUtc = responseContent[".expires"];
+                    }
+                }
+            }
         }
     }
 }
