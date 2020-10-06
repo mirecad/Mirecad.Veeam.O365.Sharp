@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
+using AutoMapper.Mappers;
 using Mirecad.Veeam.O365.Sharp.Clients;
 using Mirecad.Veeam.O365.Sharp.Handlers;
 using Mirecad.Veeam.O365.Sharp.Helpers;
@@ -94,9 +95,19 @@ namespace Mirecad.Veeam.O365.Sharp
         /// <returns></returns>
         internal async Task PostAsync(string endpoint, BodyParameters bodyParameters, CancellationToken ct)
         {
-            var parametersAsDTOs = ConvertToDtoBodyParameters(bodyParameters);
-            var apiResponse = await SendAsync(ConstructEndpointPath(endpoint), HttpMethod.Post, ct, bodyParameters: parametersAsDTOs);
-            EnsureSuccessfullApiResponse(apiResponse);
+            await ProcessApiCallAsync(ConstructEndpointPath(endpoint), HttpMethod.Post, null, bodyParameters, ct);
+        }
+
+        /// <summary>
+        /// Deletes object by REST API.
+        /// </summary>
+        /// <param name="endpoint">Relative API url.</param>
+        /// <param name="queryParameters">Url parameters.</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        internal async Task DeleteAsync(string endpoint, QueryParameters queryParameters, CancellationToken ct)
+        {
+            await ProcessApiCallAsync(ConstructEndpointPath(endpoint), HttpMethod.Delete, queryParameters, null, ct);
         }
 
         /// <summary>
@@ -140,6 +151,14 @@ namespace Mirecad.Veeam.O365.Sharp
                 apiCallResponseType);
             EnsureSuccessfullApiResponse((ApiCallResponse)apiResponse);
             return _mapper.Map<T>(((dynamic)apiResponse).Content);
+        }
+
+        private async Task ProcessApiCallAsync(Uri fullUrl, HttpMethod httpMethod, QueryParameters queryParameters,
+            BodyParameters bodyParameters, CancellationToken ct)
+        {
+            var parametersAsDTOs = ConvertToDtoBodyParameters(bodyParameters);
+            var apiResponse = await SendAsync(fullUrl, httpMethod, ct, queryParameters: queryParameters, bodyParameters: parametersAsDTOs);
+            EnsureSuccessfullApiResponse(apiResponse);
         }
 
         /// <summary>

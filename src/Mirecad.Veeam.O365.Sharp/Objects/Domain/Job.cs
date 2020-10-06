@@ -58,6 +58,11 @@ namespace Mirecad.Veeam.O365.Sharp.Objects.Domain
             await _client.Jobs.StopJobAsync(Id, ct);
         }
 
+        public async Task DeleteJobAsync(CancellationToken ct = default)
+        {
+            await _client.Jobs.DeleteJobAsync(Id, ct);
+        }
+
         public async Task<RestoreSession> StartJobRestoreSessionAsync(RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default)
         {
             return await _client.Jobs.StartJobRestoreSessionAsync(Id, sessionDetails, ct);

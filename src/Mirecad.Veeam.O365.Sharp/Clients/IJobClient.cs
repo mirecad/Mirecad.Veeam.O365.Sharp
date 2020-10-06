@@ -27,5 +27,6 @@ namespace Mirecad.Veeam.O365.Sharp.Clients
         Task StartJobAsync(string jobId, CancellationToken ct = default);
         Task StopJobAsync(string jobId, CancellationToken ct = default);
         Task<RestoreSession> StartJobRestoreSessionAsync(string jobId, RestoreSessionExploreDetails sessionDetails, CancellationToken ct = default);
+        Task DeleteJobAsync(string jobId, CancellationToken ct = default);
     }
 }
