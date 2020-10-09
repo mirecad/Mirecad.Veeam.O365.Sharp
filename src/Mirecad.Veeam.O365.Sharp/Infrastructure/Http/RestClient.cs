@@ -100,9 +100,13 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
         private HttpRequestMessage ConstructRequestMessage(HttpMethod method, Uri url, QueryParameters queryParameters, BodyParameters bodyParameters)
         {
             var urlString = ConstructUrlString(url, queryParameters);
-            var jsonString = ConvertToJson(bodyParameters);
             var request = new HttpRequestMessage(method, urlString);
-            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var hasBody = bodyParameters != null && bodyParameters.GetParameters().Any();
+            if (hasBody)
+            {
+                var jsonString = ConvertToJson(bodyParameters);
+                request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            }
             return request;
         }
 
