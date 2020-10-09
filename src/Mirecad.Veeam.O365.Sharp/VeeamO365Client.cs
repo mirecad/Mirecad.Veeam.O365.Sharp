@@ -150,7 +150,9 @@ namespace Mirecad.Veeam.O365.Sharp
                 await sendMethod.InvokeAsync(this, new object[] { fullUrl, httpMethod, ct, queryParameters, parametersAsDTOs }),
                 apiCallResponseType);
             EnsureSuccessfullApiResponse((ApiCallResponse)apiResponse);
-            return _mapper.Map<T>(((dynamic)apiResponse).Content);
+            //map to object because of Automapper 10.0 .NET Framework
+            //https://docs.automapper.org/en/latest/10.0-Upgrade-Guide.html#mapping-from-dynamic-in-net-4-6-1
+            return _mapper.Map<T>(((dynamic)apiResponse).Content as object);
         }
 
         private async Task ProcessApiCallAsync(Uri fullUrl, HttpMethod httpMethod, QueryParameters queryParameters,
