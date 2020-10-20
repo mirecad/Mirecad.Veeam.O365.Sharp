@@ -26,6 +26,7 @@ namespace Mirecad.Veeam.O365.Sharp
 
         public IBackupRepositoryClient BackupRepositories { get; private set; }
         public IJobClient Jobs { get; private set; }
+        public IMailboxClient Mailboxes { get; private set; }
         public IOneDriveClient OneDrives { get; private set; }
         public IOrganizationClient Organizations { get; private set; }
         public IOrganizationUserClient OrganizationUsers { get; private set; }
@@ -180,6 +181,7 @@ namespace Mirecad.Veeam.O365.Sharp
 
             BackupRepositories = new BackupRepositoryClient(this);
             Jobs = new JobClient(this);
+            Mailboxes = new MailboxClient(this);
             OneDrives = new OneDriveClient(this);
             Organizations = new OrganizationClient(this);
             OrganizationUsers = new OrganizationUserClient(this);
