@@ -26,11 +26,13 @@ namespace Mirecad.Veeam.O365.Sharp
 
         public IBackupRepositoryClient BackupRepositories { get; private set; }
         public IJobClient Jobs { get; private set; }
+        public IMailboxClient Mailboxes { get; private set; }
         public IOneDriveClient OneDrives { get; private set; }
         public IOrganizationClient Organizations { get; private set; }
         public IOrganizationUserClient OrganizationUsers { get; private set; }
         public IOrganizationSiteClient OrganizationSites { get; private set; }
         public IOrganizationGroupClient OrganizationGroups { get; private set; }
+        public ISharePointClient SharePoints { get; private set; }
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
@@ -179,11 +181,13 @@ namespace Mirecad.Veeam.O365.Sharp
 
             BackupRepositories = new BackupRepositoryClient(this);
             Jobs = new JobClient(this);
+            Mailboxes = new MailboxClient(this);
             OneDrives = new OneDriveClient(this);
             Organizations = new OrganizationClient(this);
             OrganizationUsers = new OrganizationUserClient(this);
             OrganizationSites = new OrganizationSiteClient(this);
             OrganizationGroups = new OrganizationGroupClient(this);
+            SharePoints = new SharePointClient(this);
         }
 
         /// <summary>
