@@ -55,6 +55,10 @@ namespace Mirecad.Veeam.O365.Sharp
                 BaseAddress = options.BaseAddress,
                 Timeout = options.HttpTimeout
             };
+            if (options.MaxRequestContentBufferSize != null)
+            {
+                client.MaxResponseContentBufferSize = (long)options.MaxRequestContentBufferSize;
+            }
             var dtoResolver = new DataTransferObjectResolver();
             return new VeeamO365Client(client, options.BaseAddress, dtoResolver);
         }
