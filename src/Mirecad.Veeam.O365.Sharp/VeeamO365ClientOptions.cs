@@ -36,7 +36,7 @@ namespace Mirecad.Veeam.O365.Sharp
         /// </summary>
         public long? MaxRequestContentBufferSize { get; }
 
-        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password, TimeSpan? httpTimeout = null, int? maxRequestContentBufferSize = null)
+        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password, TimeSpan? httpTimeout = null, long? maxRequestContentBufferSize = null)
         {
             BaseAddress = baseAddress;
             Username = username;
