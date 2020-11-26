@@ -31,17 +31,11 @@ namespace Mirecad.Veeam.O365.Sharp
         /// </summary>
         public TimeSpan HttpTimeout { get; }
 
-        /// <summary>
-        /// The maximum http request content buffer size in bytes.
-        /// </summary>
-        public long? MaxRequestContentBufferSize { get; }
-
-        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password, TimeSpan? httpTimeout = null, long? maxRequestContentBufferSize = null)
+        public VeeamO365ClientOptions(Uri baseAddress, string username, SecureString password, TimeSpan? httpTimeout = null)
         {
             BaseAddress = baseAddress;
             Username = username;
             Password = password;
-            MaxRequestContentBufferSize = maxRequestContentBufferSize;
             HttpTimeout = httpTimeout ?? TimeSpan.FromMinutes(1);
         }
     }
