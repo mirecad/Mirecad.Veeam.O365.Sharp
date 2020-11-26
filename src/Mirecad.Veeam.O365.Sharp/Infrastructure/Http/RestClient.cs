@@ -84,7 +84,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
                 using (var response = await _client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead,
                     cancellationToken))
                 {
-                    var apiCallResponse = await ProcessResponseAsync(response);
+                    var apiCallResponse = await ProcessResponseAsync(response, false);
                     using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
                     {
                         using (Stream streamToWriteTo = File.Open(targetFile, FileMode.Create))
@@ -146,13 +146,18 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
             };
         }
 
-        private async Task<ApiCallResponse> ProcessResponseAsync(HttpResponseMessage response)
+        private async Task<ApiCallResponse> ProcessResponseAsync(HttpResponseMessage response, bool loadContent = true)
         {
-            return new ApiCallResponse()
+            var apiCallResponse =  new ApiCallResponse()
             {
                 StatusCode = response.StatusCode,
-                StringContent = await response.Content.ReadAsStringAsync()
             };
+            if (loadContent)
+            {
+                apiCallResponse.StringContent = await response.Content.ReadAsStringAsync();
+            }
+
+            return apiCallResponse;
         }
 
         private string ConvertToJson(BodyParameters parameters)
