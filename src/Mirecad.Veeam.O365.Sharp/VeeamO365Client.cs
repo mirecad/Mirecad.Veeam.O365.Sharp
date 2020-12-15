@@ -17,7 +17,7 @@ namespace Mirecad.Veeam.O365.Sharp
 {
     public class VeeamO365Client : RestClient, IDisposable, IVeeamO365Client
     {
-        private const string ApiVersion = "4";
+        private const string ApiVersion = "5";
 
         private Uri _baseAddress;
         private HttpClient _httpClient;
@@ -33,6 +33,7 @@ namespace Mirecad.Veeam.O365.Sharp
         public IOrganizationSiteClient OrganizationSites { get; private set; }
         public IOrganizationGroupClient OrganizationGroups { get; private set; }
         public ISharePointClient SharePoints { get; private set; }
+        public ILicensedUserClient LicensedUsers { get; private set; }
 
         protected VeeamO365Client(HttpClient client, Uri baseAddress, IDataTransferObjectResolver dtoResolver) : base(client)
         {
@@ -188,6 +189,7 @@ namespace Mirecad.Veeam.O365.Sharp
             OrganizationSites = new OrganizationSiteClient(this);
             OrganizationGroups = new OrganizationGroupClient(this);
             SharePoints = new SharePointClient(this);
+            LicensedUsers = new LicensedUserClient(this);
         }
 
         /// <summary>
