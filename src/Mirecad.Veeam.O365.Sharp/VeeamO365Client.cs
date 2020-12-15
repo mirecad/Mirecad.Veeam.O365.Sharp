@@ -17,7 +17,7 @@ namespace Mirecad.Veeam.O365.Sharp
 {
     public class VeeamO365Client : RestClient, IDisposable, IVeeamO365Client
     {
-        private const string ApiVersion = "4";
+        private const string ApiVersion = "5";
 
         private Uri _baseAddress;
         private HttpClient _httpClient;
