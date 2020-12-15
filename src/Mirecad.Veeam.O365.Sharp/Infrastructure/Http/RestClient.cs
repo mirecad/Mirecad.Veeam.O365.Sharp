@@ -45,7 +45,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure.Http
         }
 
         /// <summary>
-        /// Executes given HTTP method. Does not expect any response.
+        /// Executes given HTTP method. Does not expect any response content.
         /// </summary>
         /// <param name="url">Full resource URL.</param>
         /// <param name="method">HTTP method.</param>

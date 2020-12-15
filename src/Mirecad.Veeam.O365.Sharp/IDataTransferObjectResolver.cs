@@ -8,7 +8,7 @@ namespace Mirecad.Veeam.O365.Sharp
     public interface IDataTransferObjectResolver
     {
         /// <summary>
-        /// Returns classes within this assembly, that are decorated with <see cref="DataTransferObjectAttribute"/>.
+        /// Returns classes within assembly, that are decorated with <see cref="DataTransferObjectAttribute"/>.
         /// </summary>
         /// <param name="assembly">Assembly to search.</param>
         /// <returns></returns>
@@ -16,7 +16,7 @@ namespace Mirecad.Veeam.O365.Sharp
 
         /// <summary>
         /// Returns single DTO class associated to this domain class.
-        /// Does not take into account generic paramters.
+        /// Does not take into account generic parameters.
         /// </summary>
         /// <param name="type">Domain class.</param>
         /// <returns></returns>
