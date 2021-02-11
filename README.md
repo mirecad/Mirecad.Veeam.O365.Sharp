@@ -5,7 +5,9 @@ C# REST API wrapper for Veeam Backup for Microsoft Office 365
 
 [Rest API doc](https://helpcenter.veeam.com/docs/vbo365/rest/vbo_rest_api_reference.html?ver=50)
 
-**Library is under construction...**
+```diff
+- Library is under construction...
+```
 
 ## How to use
 ```csharp
