@@ -6,7 +6,7 @@ using Autofac.Builder;
 
 namespace Mirecad.Veeam.O365.Sharp.Infrastructure
 {
-    public sealed class DiContainer
+    internal sealed class DiContainer
     {
         private static IContainer _container;
         private static readonly object Lock = new object();
@@ -65,7 +65,7 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                 .Except<VeeamO365Client>()
-                .Except<Mapping>();
+                .PublicOnly();
 
             var genericTypes = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsGenericType);
             foreach (var genericType in genericTypes)
