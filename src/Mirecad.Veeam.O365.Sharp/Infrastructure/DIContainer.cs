@@ -64,7 +64,8 @@ namespace Mirecad.Veeam.O365.Sharp.Infrastructure
             builder.RegisterInstance<IVeeamO365Client>(client);
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                .Except<VeeamO365Client>();
+                .Except<VeeamO365Client>()
+                .Except<Mapping>();
 
             var genericTypes = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsGenericType);
             foreach (var genericType in genericTypes)
